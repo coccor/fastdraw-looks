@@ -1,0 +1,15 @@
+look "../azure.look"
+text "Orders" at 40,40 style=h1
+rg: resource-group "rg-orders" at 240,96 912x304
+vnet: vnet "vnet-orders" at 472,128 664x252
+users: external "Customers" sub="browser, app" at 40,192
+fd: node "Front Door" sub="CDN, WAF" at 264,192 icon=front-door
+app: focal "Orders API" sub="App Service" at 496,192 icon=app-service
+db: store "Orders DB" sub="Azure SQL" at 728,192 icon=sql-database
+kv: node "Key Vault" sub="secrets" at 960,192 icon=key-vault
+sb: node "Order events" sub="Service Bus" at 496,296 icon=service-bus
+users -> fd style=link
+fd -> app "POST" style=primary
+app -> db "writes" style=primary
+app.top -> kv.top "secrets"
+app.bottom -> sb.top "publishes"

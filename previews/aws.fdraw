@@ -1,0 +1,15 @@
+look "../aws.look"
+text "Orders" at 40,40 style=h1
+cloud: aws-cloud "AWS Cloud" at 216,96 936x304
+region: region "eu-west-1" at 240,128 888x252
+users: external "Customers" sub="browser, app" at 40,192
+cf: node "CloudFront" sub="CDN, WAF" at 264,192 icon=cloudfront
+api: node "API Gateway" sub="REST" at 496,192 icon=api-gateway
+fn: focal "Orders" sub="Lambda" at 728,192 icon=lambda
+db: store "Orders table" sub="DynamoDB" at 960,192 icon=dynamodb
+q: node "Order events" sub="SQS" at 728,296 icon=sqs
+users -> cf style=link
+cf -> api
+api -> fn "POST" style=primary
+fn -> db "writes" style=primary
+fn.bottom -> q.top "publishes"

@@ -1,0 +1,15 @@
+look "../gcp.look"
+text "Orders" at 40,40 style=h1
+gc: google-cloud "Google Cloud" at 216,96 936x304
+prj: project "orders-prod" at 240,128 888x252
+users: external "Customers" sub="browser, app" at 40,192
+lb: node "Ingress" sub="load balancer" at 264,192 icon=networking
+run: focal "Orders" sub="Cloud Run" at 496,192 icon=cloudrun
+sql: store "Orders DB" sub="Cloud SQL" at 728,192 icon=cloudsql
+bq: node "Analytics" sub="BigQuery" at 960,192 icon=bigquery
+gcs: store "Receipts" sub="Cloud Storage" at 496,296 icon=cloud-storage
+users -> lb style=link
+lb -> run "POST" style=primary
+run -> sql "writes" style=primary
+sql -> bq "exports"
+run.bottom -> gcs.top "PDFs"
