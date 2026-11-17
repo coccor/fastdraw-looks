@@ -1,7 +1,8 @@
-// Google Cloud: drawn the way Google Cloud's Architecture Center draws diagrams. White and pastel cards with rounded
-// corners and crisp dark outlines, data as a stack of cards, subsystems as pastel panels with a dashed outline, the
-// Google Cloud boundary as a solid blue panel holding grey region and project panels, black lines, Google Sans, and
-// Google Cloud's product icons (icon=bigquery, icon=gke). Same style names as the built-in look.
+// Google Cloud: drawn the way Google Cloud's architecture docs draw diagrams (the Enterprise Application Blueprint).
+// White cards with heavy dark outlines and the product icon on the left, data as a card with a grey card behind it,
+// nested panels with the name centred at the top (a project light blue, a region grey, a GKE cluster blue, a namespace
+// yellow), dark lines with open heads, dashed for the control plane, Google Sans, and Google Cloud's product icons
+// (icon=bigquery, icon=gke). Same style names as the built-in look.
 
 canvas paper=paper dots=none
 
@@ -10,7 +11,7 @@ color card   #ffffff
 color ink    #202124
 color muted  #3c4043
 color soft   #80868b
-color accent #4285f4
+color accent #1a73e8
 color link   #202124
 color teal   #137333
 color amber  #b06000
@@ -26,50 +27,53 @@ icondir "https://cdn.jsdelivr.net/npm/gcp-icons@1.0.6/dist/icons/{name}-512-colo
 icons builtin=hidden
 
 // ---- boxes ----------------------------------------------------------------
-style node shape=rect radius=8 size=144x64 fill=#ffffff stroke=ink sw=1.3 sub.font=sans sub.color=muted title.weight=500 title.color=ink
+style node shape=rect radius=4 size=144x64 fill=#ffffff stroke=#1f2124 sw=2 sub.font=sans sub.color=muted title.size=12 title.weight=600 title.color=ink icon.size=28
     tag.color=ink tag.border=ink/0.5 tag.font=mono icon.color=accent icon.fill=accent/0.14
     use="default box: a backend, service, component or step"
-style focal extends node fill=#d2e3fc stroke=ink sw=2 title.color=ink
+style focal extends node fill=#e8f0fe stroke=accent sw=2.5 title.color=ink
     tag.color=ink tag.border=ink ghost.color=accent/0.10
     use="the one or two elements the diagram is about"
-style store extends node fill=#ffffff shape=rect stroke=ink icon.color=teal icon.fill=teal/0.14 tag.color=teal tag.border=teal/0.4 sw=1.3 depth=5 depth.fill=#ffffff depth.stroke=ink
+style store extends node fill=#ffffff shape=rect stroke=#1f2124 icon.color=teal icon.fill=teal/0.14 tag.color=teal tag.border=teal/0.4 sw=2 depth=5 depth.fill=#bec1c6 depth.stroke=#1f2124
     path="M0,0.1 C0,-0.035 1,-0.035 1,0.1 L1,0.9 C1,1.035 0,1.035 0,0.9 Z M0,0.1 C0,0.235 1,0.235 1,0.1 C1,0.235 0,0.235 0,0.1"
     use="something that holds data or state"
-style cloud extends node fill=#e6f4ea stroke=ink icon.color=link icon.fill=link/0.14 tag.color=link tag.border=link/0.4 sw=1.3
+style cloud extends node fill=#e8f0fe stroke=#1f2124 icon.color=link icon.fill=link/0.14 tag.color=link tag.border=link/0.4 sw=2
     use="a hosted or third-party platform"
-style external extends node fill=#f1f3f4 stroke=ink dash=none icon.color=muted icon.fill=ink/0.06 sw=1.3
+style external extends node fill=#ffffff stroke=#1f2124 dash=none icon.color=ink icon.fill=none sw=2 icon=user
     use="a person or system outside what you own"
-style optional extends node fill=#ffffff stroke=ink dash=4,3 tag.color=soft tag.border=ink/0.18 sw=1.3
+style optional extends node fill=#ffffff stroke=#1f2124 dash=6,5 tag.color=soft tag.border=ink/0.18 sw=1.5
     use="optional or asynchronous participant"
-style sticky extends node radius=4 size=120x120 fill=#fef7e0 stroke=ink tag.color=ink tag.border=ink/0.3 sw=1.3
+style sticky extends node radius=4 size=120x120 fill=#ffeebd stroke=#1f2124 tag.color=ink tag.border=ink/0.3 sw=1
     use="a yellow sticky note: an idea, comment or open question"
 style sticky-orange extends sticky fill=#fad2cf stroke=rose/0.35 use="an orange sticky note: a risk or issue"
 style sticky-violet extends sticky fill=#e9d2fd stroke=violet/0.35 use="a violet sticky note: a decision or note"
 
 // ---- flowchart shapes -----------------------------------------------------
 style step extends node size=160x48 use="flowchart action"
-style terminal extends node radius=24 size=160x48 fill=#ffffff stroke=ink sw=1.3
+style terminal extends node radius=24 size=160x48 fill=#ffffff stroke=#1f2124 sw=2
     use="flowchart start or end"
-style terminal-focal extends terminal fill=#d2e3fc stroke=ink sw=2 title.color=ink
+style terminal-focal extends terminal fill=#e8f0fe stroke=accent sw=2.5 title.color=ink
     use="the flowchart outcome that matters most"
-style decision shape=diamond size=200x96 fill=#ffffff stroke=ink sw=1.3
+style decision shape=diamond size=200x96 fill=#ffffff stroke=#1f2124 sw=2
     use="flowchart yes/no question; put the text on two short lines"
 
 // ---- regions and markers --------------------------------------------------
-style zone shape=rect radius=8 fill=#e8f0fe stroke=ink sw=1 layer=back dash=4,3
-    title.pos=top title.align=left title.font=sans title.size=11 title.weight=400 title.color=ink title.spacing=0 title.caps=0
+style zone shape=rect radius=4 fill=#f1f3f4 stroke=#1f2124 sw=1 layer=back dash=none title.dy=6 title.fill=none
+    title.pos=top title.align=center title.font=sans title.size=12 title.weight=400 title.color=ink title.spacing=0 title.caps=0
     use="a labelled region drawn behind a group of boxes; always give WxH"
-style google-cloud extends zone fill=#4285f4 stroke=#1f2124 sw=1 title.font=sans title.size=11 title.weight=400 title.spacing=0 title.caps=0 dash=none title.size=14 title.weight=500 title.color=#ffffff use="the Google Cloud boundary: a blue panel; put a region or project panel inside it; always give WxH"
-style project extends zone fill=#f1f3f4 stroke=ink sw=1 title.font=sans title.size=11 title.weight=400 title.spacing=0 title.caps=0 dash=none use="a Google Cloud project: a grey panel; always give WxH"
-style region extends zone fill=#f1f3f4 stroke=ink sw=1 title.font=sans title.size=11 title.weight=400 title.spacing=0 title.caps=0 dash=none use="a region: a grey panel; always give WxH"
-style vpc extends zone fill=none stroke=ink sw=1 dash=4,3 title.font=sans title.size=11 title.weight=400 title.spacing=0 title.caps=0 dash=none use="a VPC network; always give WxH"
-style subsystem-green extends zone fill=#e3f5e9 use="a subsystem, green; always give WxH"
-style subsystem-yellow extends zone fill=#fef7e0 use="a subsystem, yellow; always give WxH"
-style on-premises extends zone fill=#ffffff stroke=ink sw=1 dash=4,3 title.font=sans title.size=11 title.weight=400 title.spacing=0 title.caps=0 dash=none use="systems outside Google Cloud; always give WxH"
-style bar shape=rect radius=2 size=8x80 fill=#d2e3fc stroke=ink sw=1
+style project extends zone fill=#aecbfa use="a Google Cloud project: a light blue panel; always give WxH"
+style region extends zone fill=#f1f3f4 use="a region: a grey panel; always give WxH"
+style gke-cluster extends zone fill=#669df6 use="a GKE cluster: a blue panel; always give WxH"
+style namespace extends zone fill=#ffeebd use="a Kubernetes namespace or a tenant: a yellow panel; always give WxH"
+style service-group extends zone fill=#ffffff use="a service and what runs in it: a white panel; always give WxH"
+style google-cloud extends zone fill=#4285f4 title.align=left title.size=14 title.weight=500 title.color=#ffffff use="the Google Cloud boundary: a blue panel with the name in white; always give WxH"
+style vpc extends zone fill=none dash=6,5 use="a VPC network: a dashed frame; always give WxH"
+style on-premises extends zone fill=#ffffff dash=6,5 use="systems outside Google Cloud: a dashed frame; always give WxH"
+style subsystem-blue extends zone fill=#e8f0fe dash=4,3 use="a subsystem: a pale blue panel with a dashed outline; always give WxH"
+style subsystem-green extends zone fill=#e3f5e9 dash=4,3 use="a subsystem: a pale green panel with a dashed outline; always give WxH"
+style bar shape=rect radius=2 size=8x80 fill=#aecbfa stroke=#1f2124 sw=1
     use="sequence diagram activation bar, centred on a lifeline; always give WxH"
 
-style table shape=table radius=8 fill=#ffffff stroke=ink sw=1.3 head.fill=#f1f3f4 rule=ink/0.2
+style table shape=table radius=4 fill=#ffffff stroke=#1f2124 sw=2 head.fill=#f1f3f4 rule=ink/0.2
     cell.font=mono cell.size=10 detail.color=muted
     use="an entity, class or database table: a header and rows. One line per row: | id \"name\" \"type\" \"key\". Arrows can end on a row: orders.user_id -> users.id"
 style matrix extends table align=center grid=1 cell.font=sans
@@ -79,12 +83,12 @@ style chart shape=chart fill=none stroke=ink/0.5 sw=1 mask=0 bar.radius=2 grid.c
     use="axes with your numbers drawn for you: chart at x,y WxH x=\"Q1,Q2,Q3\" y=0..100, then a line per series: | bars \"Revenue\" 42 61 75"
 
 // ---- lines ----------------------------------------------------------------
-style arrow line stroke=ink sw=1.3 route=ortho radius=0 label.font=sans label.size=10 label.color=ink label.spacing=0 label.caps=0 head.size=0.9
+style arrow line stroke=ink sw=1.6 route=ortho radius=0 label.font=sans label.size=9.5 label.color=ink label.spacing=0 label.caps=0 head=open head.size=0.9 label.weight=600
     use="default arrow"
-style primary extends arrow stroke=ink sw=2.2 label.color=ink label.weight=500 use="the main path; at most two per diagram"
+style primary extends arrow stroke=accent sw=2.4 label.color=ink use="the main path; at most two per diagram"
 style link extends arrow stroke=ink label.color=ink use="an HTTP or API request crossing a boundary"
-style return extends arrow dash=4,3 use="a response, or something optional or asynchronous"
-style relation extends relation stroke=ink/0.8 label.font=sans label.size=10 label.spacing=0 label.caps=0
+style return extends arrow dash=6,5 use="a response, or something optional or asynchronous"
+style relation extends relation stroke=ink label.font=sans label.size=10 label.spacing=0 label.caps=0
 style lifeline line head=none stroke=ink/0.20 sw=1 dash=4,4 route=straight use="sequence diagram lifeline"
 style rule line head=none stroke=ink/0.10 sw=1 route=straight use="thin separator, e.g. above a legend"
 
@@ -94,7 +98,7 @@ style kicker text font=mono size=10 weight=500 color=#1a73e8 spacing=0.12 caps=1
 style dek text font=sans size=14 color=muted use="optional: one line under the title saying what the diagram shows"
 style eyebrow text font=mono size=8 color=muted spacing=0.14 caps=1 use="small caps label, e.g. LEGEND"
 style caption text font=sans size=9.5 color=muted use="small explanatory text"
-style legend extends legend rule=ink/0.1 title.font=mono item.size=9.5
+style legend extends legend rule=ink/0.3 title.font=mono item.size=9.5
 style note text font=sans size=13 color=muted use="a short aside; at most two"
 style small text font=mono size=9 color=muted use="technical detail: a port, path or command"
 
@@ -105,7 +109,7 @@ guidance "sub= is a short second line of detail: a product name, path, port or p
 guidance "kicker and dek are optional. Add a kicker only when the diagram belongs to a named category, and a dek only when there is one clear message; most diagrams need neither."
 guidance "Finish with a legend: one statement, 'legend at x,y' followed by style=\"what it means\" for each style you used."
 guidance "Icons are Google Cloud's, by name: icon=cloudrun, computeengine, gke, cloud-storage, cloudsql, cloudspanner, alloydb, bigquery, vertexai, apigee, looker, networking. The set has 45 product and category icons; fastdraw icons <look> lists them."
-guidance "Draw the boundary as google-cloud with a region or project panel inside it, leaving 40px at the top of google-cloud for its name; zone, subsystem-green and subsystem-yellow are subsystems."
+guidance "Nest panels as Google Cloud does: project, then region, then gke-cluster, then namespace, then service-group; leave 32px at the top of each panel for its name. Draw the control plane with style=return (dashed) and say so in a legend."
 
 // ---- icons ----------------------------------------------------------------------
 icon apigee "https://cdn.jsdelivr.net/npm/gcp-icons@1.0.6/dist/icons/apigee-512-color-rgb.svg"

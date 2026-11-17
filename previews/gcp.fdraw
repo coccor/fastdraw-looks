@@ -1,15 +1,19 @@
 look "../gcp.look"
-text "Orders" at 40,40 style=h1
-gc: google-cloud "Google Cloud" at 216,96 936x304
-prj: project "orders-prod" at 240,128 888x252
-users: external "Customers" sub="browser, app" at 40,192
-lb: node "Ingress" sub="load balancer" at 264,192 icon=networking
-run: focal "Orders" sub="Cloud Run" at 496,192 icon=cloudrun
-sql: store "Orders DB" sub="Cloud SQL" at 728,192 icon=cloudsql
-bq: node "Analytics" sub="BigQuery" at 960,192 icon=bigquery
-gcs: store "Receipts" sub="Cloud Storage" at 496,296 icon=cloud-storage
-users -> lb style=link
-lb -> run "POST" style=primary
-run -> sql "writes" style=primary
-sql -> bq "exports"
-run.bottom -> gcs.top "PDFs"
+prj: project "orders-prod" at 216,40 968x456
+reg: region "us-west1" at 240,152 712x320
+gke: gke-cluster "GKE cluster" at 264,192 456x256
+ns: namespace "tenant1" at 288,232 408x192
+users: external "Customers" at 40,272
+lb: node "Cloud Load Balancing" at 264,72 232x56 icon=networking
+run: focal "Orders" sub="Deployment" at 312,272 icon=gke
+pods: store "Pods" sub="3 replicas" at 528,272 icon=containers
+sql: store "Orders DB" sub="Cloud SQL" at 776,272 icon=cloudsql
+bq: node "Analytics" sub="BigQuery" at 1008,152 icon=bigquery
+build: node "Cloud Build" at 1008,376 icon=developer-tools
+users.top -> lb.left style=link
+lb.bottom -> run.top "HTTPS" style=primary lpos=412,140
+run -> pods
+pods -> sql style=primary
+sql.top -> bq.left "exports" lpos=980,180
+build.left -> pods.bottom "deploys" style=return
+legend at 40,528 arrow="Traffic flow" return="Control plane"

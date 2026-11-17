@@ -20,7 +20,7 @@ The `fastdraw` command line fetches the look from that address and keeps a copy 
 
 ## Cloud looks
 
-Each is drawn the way that cloud's own documentation draws architecture, with its own icons in place of FastDraw's outlines and extra styles for its groups. The style names stay the built-in look's, so a diagram drawn for it switches with one line; an icon it already uses from FastDraw's set still draws. Azure keeps the built-in box sizes; AWS boxes are 144x88, to hold the icon above the name.
+Each is drawn the way that cloud's own documentation draws architecture, with its own icons in place of FastDraw's outlines and extra styles for its groups. The style names stay the built-in look's, so a diagram drawn for it switches with one line; an icon it already uses from FastDraw's set still draws. Azure keeps the built-in box sizes; AWS boxes are 144x104, to hold the icon above the name.
 
 The icons and the font are fetched by address from jsDelivr, at fixed versions: the editor fetches the ones a diagram uses, and the command line keeps a copy for `--offline`. `fastdraw icons <look>` lists a look's icons, and `fastdraw icons <look> queue` searches them.
 
@@ -32,13 +32,13 @@ Azure blue, Open Sans and 146 Azure service icons by short name (`icon=app-servi
 
 ### AWS — `aws.look`
 
-As the AWS documentation draws it: no boxes, each service is its icon with the name under it, people and clients are the generic AWS icons (`icon=users`, `client`, `mobile-client`, `internet`), groups are square panels, and every line is black, the main path heavier. Arimo (Arial's widths) and all 300 AWS architecture service icons (the [`aws-icons`](https://www.npmjs.com/package/aws-icons) package). Common services have the short names people use (`icon=lambda`, `s3`, `dynamodb`, `rds`, `ec2`, `ecs`, `eks`, `api-gateway`, `cloudfront`, `sqs`, `sns`, `elb`); the rest are named after the service (`app-runner`, `opensearch`). Groups, in the colours AWS gives them: `aws-cloud`, `account`, `region`, `az`, `vpc`, `public-subnet`, `private-subnet`, `security-group`, and `optional-group` (dashed).
+As the AWS Solutions documentation draws it: no boxes, each service is its 48px icon with the name under it and an italic second line; people and devices are AWS's generic icons (`icon=users`, `user`, `client`, `mobile-client`, `internet`). Groups are frames with the group's own icon as a tab in the top-left corner: `aws-cloud` (the AWS logo), `cloud-group`, `account`, `region`, `vpc`, `public-subnet`, `private-subnet`, `auto-scaling`, `data-center`; also `az` and `security-group`, and `zone`, a dashed generic group that shows any icon it is given as its tab. Lines are dark with open heads, and `callout "1"` numbers the flow in black circles. Arimo (Arial's widths) and all 300 AWS architecture service icons (the [`aws-icons`](https://www.npmjs.com/package/aws-icons) package), with the short names people use for common services (`icon=lambda`, `s3`, `dynamodb`, `rds`, `ec2`, `ecs`, `eks`, `api-gateway`, `cloudfront`, `sqs`, `sns`, `elb`) and the rest named after the service. A service's box is 144x104. The group tabs need FastDraw's `icon.pos=corner`.
 
 ![AWS](previews/aws.png)
 
 ### Google Cloud — `gcp.look`
 
-As Google Cloud's Architecture Center draws it: white and pastel cards with rounded corners and crisp dark outlines, data as a stack of cards, subsystems as pastel panels with a dashed outline (`zone`, `subsystem-green`, `subsystem-yellow`), and the Google Cloud boundary as a solid blue panel (`google-cloud`) holding grey `region` and `project` panels; black lines. Google Sans and Google Cloud's 45 product and category icons (`icon=cloudrun`, `gke`, `cloudsql`, `bigquery`, `cloud-storage`, `vertexai`; the [`gcp-icons`](https://www.npmjs.com/package/gcp-icons) package). Also `vpc` and `on-premises`.
+As Google Cloud's architecture docs draw it (the Enterprise Application Blueprint): white cards with heavy dark outlines and the product icon on the left, data as a card with a grey card behind it, and nested panels with the name centred at the top: `project` light blue, `region` grey, `gke-cluster` blue, `namespace` yellow, `service-group` white. Lines are dark with open heads, dashed (`style=return`) for the control plane. Also `google-cloud` (a blue panel), `vpc`, `on-premises`, `subsystem-blue` and `subsystem-green`. Google Sans and Google Cloud's 45 product and category icons (`icon=cloudrun`, `gke`, `cloudsql`, `bigquery`, `cloud-storage`, `vertexai`; the [`gcp-icons`](https://www.npmjs.com/package/gcp-icons) package).
 
 ![Google Cloud](previews/gcp.png)
 

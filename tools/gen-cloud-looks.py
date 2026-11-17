@@ -83,6 +83,10 @@ def kebab(file):
     words = re.findall(r'[A-Z]+\d*(?=[A-Z][a-z]|$)|[A-Z]?[a-z]+\d*|[A-Z]+\d+|\d+', s)
     return '-'.join(w.lower() for w in words)
 
+AWS_GROUPS = {'group-aws-cloud': 'AWSCloudlogo', 'group-cloud': 'AWSCloud', 'group-account': 'AWSAccount', 'group-region': 'Region',
+              'group-vpc': 'VirtualprivatecloudVPC', 'group-public-subnet': 'Publicsubnet', 'group-private-subnet': 'Privatesubnet',
+              'group-auto-scaling': 'AutoScalinggroup', 'group-data-center': 'Corporatedatacenter', 'group-ec2-contents': 'EC2instancecontents',
+              'group-spot-fleet': 'SpotFleet', 'group-server-contents': 'Servercontents'}
 AWS_GENERIC = {'users': 'Users', 'user': 'User', 'client': 'Client', 'mobile-client': 'Mobileclient', 'internet': 'Internet',
                'generic-application': 'GenericApplication', 'office-building': 'Officebuilding', 'authenticated-user': 'AuthenticatedUser'}
 
@@ -100,123 +104,149 @@ def aws_icons():
         if n in names:
             raise SystemExit(f'{n} is both a service and a generic icon')
         out.append(f'icon {n} "https://cdn.jsdelivr.net/npm/aws-icons@3.3.0/icons/resource/{f}.svg"')
+    for n, f in AWS_GROUPS.items():
+        out.append(f'icon {n} "https://cdn.jsdelivr.net/npm/aws-icons@3.3.0/icons/architecture-group/{f}.svg"')
     return out
 
 def aws(base):
-    """AWS as its documentation draws it: no boxes, each service an icon with its name under it; square groups."""
-    c = {'paper': '#ffffff', 'card': '#ffffff', 'ink': '#000000', 'muted': '#545b64', 'soft': '#879196',
-         'accent': '#ff9900', 'link': '#232f3e', 'teal': '#00a4a6', 'amber': '#d45b07', 'rose': '#dd344c', 'violet': '#8c4fff'}
-    # a service is its icon with the name under it, and no box; the box is still there to place it and end lines on
-    bare = {'fill': 'none', 'stroke': 'none', 'icon.pos': 'top', 'icon.size': '36', 'title.weight': '400', 'title.color': 'ink',
-            'sub.font': 'sans', 'sub.color': 'muted', 'tag.color': 'ink', 'tag.border': 'ink/0.5'}
-    boxed = {'fill': '#ffffff', 'stroke': 'ink', 'sw': '1', 'icon.pos': 'left', 'icon.size': '20', 'title.weight': '600'}
+    """AWS as its documentation draws it (the AWS Solutions diagrams): no boxes, each service a large icon with its name
+    under it; groups are frames with the group's icon as a tab in the top-left corner; dark lines with open heads."""
+    c = {'paper': '#ffffff', 'card': '#ffffff', 'ink': '#232f3e', 'muted': '#232f3e', 'soft': '#7d8998',
+         'accent': '#ed7100', 'link': '#232f3e', 'teal': '#01a88d', 'amber': '#ed7100', 'rose': '#e7157b', 'violet': '#8c4fff'}
+    # a service is its icon with the name under it and no box; the box is still there to place it and end lines on
+    bare = {'fill': 'none', 'stroke': 'none', 'icon.pos': 'top', 'icon.size': '48', 'title.size': '13', 'title.weight': '400',
+            'title.color': 'ink', 'sub.font': 'sans', 'sub.size': '11', 'sub.italic': '1', 'sub.color': 'ink',
+            'tag.color': 'ink', 'tag.border': 'ink/0.5'}
+    boxed = {'fill': '#ffffff', 'stroke': 'ink', 'sw': '1.5', 'icon.pos': 'left', 'icon.size': '20', 'title.size': '12', 'title.weight': '400',
+             'sub.size': '10', 'sub.italic': '1'}
     edits = {
-        'node': {'radius': '0', 'size': '144x88', **bare},
-        # the subject is the one service with a tint behind it
-        'focal': {**bare, 'fill': '#fff4e5', 'radius': '4', 'title.weight': '700'},
+        'node': {'radius': '0', 'size': '144x104', **bare},
+        # the subject: the one service with a tint behind it
+        'focal': {**bare, 'fill': '#fdf0e3', 'radius': '4', 'title.weight': '700'},
         'store': {**bare, 'shape': 'rect'},
         'cloud': bare,
+        # people and devices: AWS's generic outline icons
         'external': {**bare, 'icon': 'users'},
-        'optional': {**bare, 'stroke': 'ink/0.6', 'dash': '4,3'},
-        'sticky': {'fill': '#fff7d6', 'stroke': 'ink/0.4', 'icon.pos': 'left', 'icon.size': '20'},
+        'optional': {**bare, 'stroke': 'soft', 'dash': '4,3'},
+        'sticky': {'fill': '#fff7d6', 'stroke': 'ink/0.4', 'icon.pos': 'left', 'icon.size': '20', 'title.size': '12', 'sub.italic': '0'},
         'sticky-orange': {'fill': '#ffe8d9'},
         'sticky-violet': {'fill': '#efe7ff'},
         'step': boxed, 'terminal': boxed,
-        'terminal-focal': {**boxed, 'fill': '#fff4e5', 'stroke': 'accent', 'sw': '2', 'title.color': 'ink'},
-        'decision': {'fill': '#ffffff', 'stroke': 'ink', 'sw': '1'},
-        # a plain group: a grey panel with square corners
-        'zone': {'radius': '0', 'fill': '#f2f3f3', 'stroke': '#879196', 'sw': '1', 'title.font': 'sans', 'title.size': '11', 'title.weight': '400',
-                 'title.color': 'ink', 'title.spacing': '0', 'title.caps': '0'},
+        'terminal-focal': {**boxed, 'fill': '#fdf0e3', 'stroke': 'accent', 'sw': '2', 'title.color': 'ink'},
+        'decision': {'fill': '#ffffff', 'stroke': 'ink', 'sw': '1.5'},
+        # a generic group: a dashed grey frame; given an icon, it shows it as a tab in the corner
+        'zone': {'radius': '0', 'fill': 'none', 'stroke': 'soft', 'sw': '1.5', 'dash': '4,3', 'icon.pos': 'corner', 'icon.size': '32',
+                 'title.font': 'sans', 'title.size': '13', 'title.weight': '400', 'title.color': 'ink', 'title.spacing': '0', 'title.caps': '0',
+                 'title.dy': '3.5', 'title.fill': 'none'},
         'bar': {'fill': 'accent/0.15', 'stroke': 'accent'},
-        'table': {'radius': '0', 'stroke': 'ink/0.6', 'head.fill': '#f2f3f3', 'rule': 'ink/0.15'},
-        'arrow': {'stroke': 'ink', 'sw': '1.5', 'radius': '0', 'label.color': 'ink', 'label.italic': '1'},
-        # the documentation draws every line black: the main path is the heavier one
-        'primary': {'stroke': 'ink', 'sw': '2.4', 'label.color': 'ink', 'label.weight': '600'},
+        'table': {'radius': '0', 'stroke': 'ink', 'sw': '1.5', 'head.fill': '#f2f3f3', 'rule': 'ink/0.15'},
+        # dark lines with open heads, square turns
+        'arrow': {'stroke': 'ink', 'sw': '2', 'radius': '0', 'head': 'open', 'label.color': 'ink', 'label.size': '11', 'label.italic': '1'},
+        'primary': {'stroke': 'accent', 'sw': '2.5', 'label.color': 'ink', 'label.weight': '600'},
         'link': {'stroke': 'ink', 'label.color': 'ink'},
-        'return': {'dash': '5,4'},
-        'relation': {'stroke': 'ink/0.7'},
-        'kicker': {'color': '#d45b07'},
+        'return': {'dash': '6,4'},
+        'relation': {'stroke': 'ink'},
+        'kicker': {'color': '#ed7100'},
     }
-    T_ = 'title.font=sans title.size=11 title.weight=400 title.spacing=0 title.caps=0'
+    def group(name, icon, colour, use, extra=''):
+        return (f'style {name} extends zone stroke={colour} sw=2 dash=none icon={icon} title.color=ink {extra}'
+                f' use="{use}; always give WxH"').replace('  ', ' ')
     groups = [
-        f'style aws-cloud extends zone fill=none stroke=#232f3e {T_} title.color=#232f3e use="the AWS Cloud boundary; always give WxH"',
-        f'style account extends zone fill=none stroke=#e7157b {T_} title.color=#e7157b use="an AWS account; always give WxH"',
-        f'style region extends zone fill=none stroke=#00a4a6 dash=5,4 {T_} title.color=#00a4a6 use="an AWS Region; always give WxH"',
-        f'style az extends zone fill=none stroke=#00a4a6 dash=4,3 {T_} title.color=#00a4a6 use="an Availability Zone; always give WxH"',
-        f'style vpc extends zone fill=none stroke=#8c4fff {T_} title.color=#8c4fff use="a VPC; always give WxH"',
-        f'style public-subnet extends zone fill=#f2f6e8 stroke=none {T_} title.color=#5a7a10 use="a public subnet inside a VPC; always give WxH"',
-        f'style private-subnet extends zone fill=#e6f6f7 stroke=none {T_} title.color=#00777a use="a private subnet inside a VPC; always give WxH"',
-        f'style security-group extends zone fill=none stroke=#dd344c dash=3,3 {T_} title.color=#dd344c use="a security group; always give WxH"',
-        f'style optional-group extends zone fill=none stroke=ink dash=4,3 {T_} use="a part that is optional; always give WxH"',
+        group('aws-cloud', 'group-aws-cloud', '#232f3e', 'the AWS Cloud: a dark frame with the AWS logo in the corner'),
+        group('cloud-group', 'group-cloud', '#232f3e', 'a part of AWS, such as an account by its owner: a dark frame with a cloud in the corner'),
+        group('account', 'group-account', '#e7157b', 'an AWS account: a pink frame with the account icon'),
+        group('region', 'group-region', '#01a88d', 'an AWS Region: a dashed teal frame with a flag', 'dash=5,4 sw=1.5'),
+        group('vpc', 'group-vpc', '#8c4fff', 'a VPC: a purple frame'),
+        group('public-subnet', 'group-public-subnet', '#7aa116', 'a public subnet: a green panel', 'fill=#f2f6e8 stroke=none'),
+        group('private-subnet', 'group-private-subnet', '#01a88d', 'a private subnet: a teal panel', 'fill=#e6f6f7 stroke=none'),
+        group('auto-scaling', 'group-auto-scaling', '#ed7100', 'an Auto Scaling group: a dashed orange frame', 'dash=5,4'),
+        group('data-center', 'group-data-center', '#7d8998', 'a corporate data center: a grey frame'),
+        'style az extends zone stroke=#01a88d sw=1.5 dash=5,4 use="an Availability Zone: a dashed teal frame; always give WxH"',
+        'style security-group extends zone stroke=#dd344c sw=1.5 dash=3,3 use="a security group: a dashed red frame; always give WxH"',
+        # the black circles AWS diagrams number their flow with
+        'style callout shape=ellipse size=32x32 fill=ink stroke=none title.color=#ffffff title.size=14 title.weight=700'
+        ' use="a numbered step of the flow, a black circle: callout \\"1\\" at x,y (32x32)"',
     ]
-    head = ['AWS: drawn the way the AWS documentation draws architecture. No boxes: each service is its AWS icon with the name',
-            'under it (and a second line under that), people and clients are the generic AWS icons, groups are square panels',
-            '(grey, or outlined in the colour AWS gives a Region, a VPC or a subnet), and every line is black, the main path',
-            'heavier. Arimo (Arial\'s widths). Same style names as the built-in look; a box is 144x88 to hold the icon above the name.']
+    head = ['AWS: drawn the way the AWS Solutions documentation draws architecture. No boxes: each service is its 48px AWS icon with',
+            'the name under it and an italic second line; people and devices are AWS\'s generic icons. Groups are frames with the',
+            'group\'s icon as a tab in the top-left corner (the AWS Cloud logo, a cloud, an account, a Region flag, a VPC, a subnet),',
+            'lines are dark with open heads, and callout numbers the flow in black circles. Arimo (Arial\'s widths). Same style',
+            'names as the built-in look; a service\'s box is 144x104, to hold the icon above the name.']
     settings = ['canvas paper=paper dots=none', '', *colours(c), '', *fonts('Arimo'), '',
                 '// the AWS architecture icons (the aws-icons package, at a fixed version), each named below',
                 'icons builtin=hidden']
-    guidance = ['Each service is its icon with the name under it: give every box an icon (icon=lambda, s3, dynamodb, rds, aurora, ec2, ecs, eks, fargate, api-gateway, cloudfront, route53, elb, sqs, sns, eventbridge, step-functions, kinesis, cognito, iam, kms, secrets-manager, cloudwatch); people and devices are icon=users, user, client, mobile-client, internet. fastdraw icons <look> lists them all.',
-                'Boxes are 144x88: leave about 120px between rows. Nest groups the way AWS does: aws-cloud, region, vpc, az, then public-subnet or private-subnet; optional-group marks an optional part.']
+    guidance = ['Each service is its icon with the name under it: give every box an icon (icon=lambda, s3, dynamodb, rds, aurora, ec2, ecs, eks, fargate, api-gateway, cloudfront, route53, elb, sqs, sns, eventbridge, step-functions, kinesis, cognito, iam, kms, secrets-manager, cloudwatch); people and devices are icon=users, user, client, mobile-client, internet. Name a service as AWS does (Amazon S3, AWS Lambda) and put its role in sub=. fastdraw icons <look> lists every icon.',
+                'Boxes are 144x104: leave about 140px between rows. Nest groups the way AWS does: aws-cloud, then account or cloud-group, region, vpc, az, public-subnet or private-subnet; zone is a dashed generic group, and given icon=<a service> it shows that icon as its tab (a Step Functions workflow: icon=step-functions).',
+                'Number the steps of the flow with callout "1", callout "2" beside the lines they describe.']
     return build(base, edits, groups, head, settings, aws_icons(), guidance)
+
 
 # ---- Google Cloud -----------------------------------------------------------------------------------------
 GCP_RGB = ['apigee', 'cloudrun', 'computeengine', 'networking', 'secops']
 
 def gcp(base):
-    """Google Cloud as its Architecture Center draws it: pastel cards with dark outlines, a blue Google Cloud panel."""
+    """Google Cloud as its architecture docs draw it (the Enterprise Application Blueprint): white cards with heavy dark
+    outlines and the product icon on the left, nested coloured panels with the name centred at the top, dark lines with
+    open heads, dashed for the control plane."""
     c = {'paper': '#ffffff', 'card': '#ffffff', 'ink': '#202124', 'muted': '#3c4043', 'soft': '#80868b',
-         'accent': '#4285f4', 'link': '#202124', 'teal': '#137333', 'amber': '#b06000', 'rose': '#c5221f', 'violet': '#8430ce'}
-    card = {'radius': '8', 'fill': '#ffffff', 'stroke': 'ink', 'sw': '1.3', 'title.weight': '500', 'title.color': 'ink', 'sub.font': 'sans',
-            'sub.color': 'muted', 'tag.color': 'ink', 'tag.border': 'ink/0.5'}
+         'accent': '#1a73e8', 'link': '#202124', 'teal': '#137333', 'amber': '#b06000', 'rose': '#c5221f', 'violet': '#8430ce'}
+    card = {'radius': '4', 'fill': '#ffffff', 'stroke': '#1f2124', 'sw': '2', 'title.size': '12', 'title.weight': '600', 'title.color': 'ink',
+            'sub.font': 'sans', 'sub.color': 'muted', 'icon.size': '28', 'tag.color': 'ink', 'tag.border': 'ink/0.5'}
+    panel = {'radius': '4', 'stroke': '#1f2124', 'sw': '1', 'dash': 'none', 'title.font': 'sans', 'title.size': '12', 'title.weight': '400',
+             'title.color': 'ink', 'title.spacing': '0', 'title.caps': '0', 'title.align': 'center', 'title.dy': '6', 'title.fill': 'none'}
     edits = {
         'node': card,
-        'focal': {'fill': '#d2e3fc', 'stroke': 'ink', 'sw': '2', 'title.color': 'ink', 'tag.color': 'ink', 'tag.border': 'ink'},
-        # data: a stack of cards
-        'store': {'shape': 'rect', 'fill': '#ffffff', 'stroke': 'ink', 'sw': '1.3', 'depth': '5', 'depth.fill': '#ffffff', 'depth.stroke': 'ink'},
-        'cloud': {'fill': '#e6f4ea', 'stroke': 'ink', 'sw': '1.3'},
-        'external': {'fill': '#f1f3f4', 'stroke': 'ink', 'sw': '1.3', 'dash': 'none'},
-        'optional': {'fill': '#ffffff', 'stroke': 'ink', 'sw': '1.3', 'dash': '4,3'},
-        'sticky': {'fill': '#fef7e0', 'stroke': 'ink', 'sw': '1.3'},
+        'focal': {'fill': '#e8f0fe', 'stroke': 'accent', 'sw': '2.5', 'title.color': 'ink', 'tag.color': 'ink', 'tag.border': 'ink'},
+        # data, and replicas, as a card with a grey card behind it
+        'store': {'shape': 'rect', 'fill': '#ffffff', 'stroke': '#1f2124', 'sw': '2', 'depth': '5', 'depth.fill': '#bec1c6', 'depth.stroke': '#1f2124'},
+        'cloud': {'fill': '#e8f0fe', 'stroke': '#1f2124', 'sw': '2'},
+        'external': {'fill': '#ffffff', 'stroke': '#1f2124', 'sw': '2', 'dash': 'none', 'icon': 'user', 'icon.color': 'ink', 'icon.fill': 'none'},
+        'optional': {'fill': '#ffffff', 'stroke': '#1f2124', 'sw': '1.5', 'dash': '6,5'},
+        'sticky': {'fill': '#ffeebd', 'stroke': '#1f2124', 'sw': '1'},
         'sticky-orange': {'fill': '#fad2cf'},
         'sticky-violet': {'fill': '#e9d2fd'},
-        'terminal': {'fill': '#ffffff', 'stroke': 'ink', 'sw': '1.3'},
-        'terminal-focal': {'fill': '#d2e3fc', 'stroke': 'ink', 'sw': '2', 'title.color': 'ink'},
-        'decision': {'fill': '#ffffff', 'stroke': 'ink', 'sw': '1.3'},
-        # a subsystem: a pastel panel with a dashed outline
-        'zone': {'radius': '8', 'fill': '#e8f0fe', 'stroke': 'ink', 'sw': '1', 'dash': '4,3', 'title.font': 'sans', 'title.size': '11',
-                 'title.weight': '400', 'title.color': 'ink', 'title.spacing': '0', 'title.caps': '0'},
-        'bar': {'fill': '#d2e3fc', 'stroke': 'ink'},
-        'table': {'radius': '8', 'stroke': 'ink', 'sw': '1.3', 'head.fill': '#f1f3f4', 'rule': 'ink/0.2'},
-        'arrow': {'stroke': 'ink', 'sw': '1.3', 'radius': '0', 'head.size': '0.9', 'label.color': 'ink'},
-        'primary': {'stroke': 'ink', 'sw': '2.2', 'label.color': 'ink', 'label.weight': '500'},
+        'terminal': {'fill': '#ffffff', 'stroke': '#1f2124', 'sw': '2'},
+        'terminal-focal': {'fill': '#e8f0fe', 'stroke': 'accent', 'sw': '2.5', 'title.color': 'ink'},
+        'decision': {'fill': '#ffffff', 'stroke': '#1f2124', 'sw': '2'},
+        # a plain group: a grey panel, its name centred at the top
+        'zone': {**panel, 'fill': '#f1f3f4'},
+        'bar': {'fill': '#aecbfa', 'stroke': '#1f2124'},
+        'table': {'radius': '4', 'stroke': '#1f2124', 'sw': '2', 'head.fill': '#f1f3f4', 'rule': 'ink/0.2'},
+        'arrow': {'stroke': 'ink', 'sw': '1.6', 'radius': '0', 'head': 'open', 'head.size': '0.9', 'label.color': 'ink', 'label.size': '9.5', 'label.weight': '600'},
+        'primary': {'stroke': 'accent', 'sw': '2.4', 'label.color': 'ink'},
         'link': {'stroke': 'ink', 'label.color': 'ink'},
-        'return': {'dash': '4,3'},
-        'relation': {'stroke': 'ink/0.8'},
+        # the control plane: dashed
+        'return': {'dash': '6,5'},
+        'relation': {'stroke': 'ink'},
+        'legend': {'rule': 'ink/0.3'},
         'kicker': {'color': '#1a73e8'},
     }
-    T_ = 'title.font=sans title.size=11 title.weight=400 title.spacing=0 title.caps=0 dash=none'
     groups = [
-        f'style google-cloud extends zone fill=#4285f4 stroke=#1f2124 sw=1 {T_} title.size=14 title.weight=500 title.color=#ffffff use="the Google Cloud boundary: a blue panel; put a region or project panel inside it; always give WxH"',
-        f'style project extends zone fill=#f1f3f4 stroke=ink sw=1 {T_} use="a Google Cloud project: a grey panel; always give WxH"',
-        f'style region extends zone fill=#f1f3f4 stroke=ink sw=1 {T_} use="a region: a grey panel; always give WxH"',
-        f'style vpc extends zone fill=none stroke=ink sw=1 dash=4,3 {T_} use="a VPC network; always give WxH"',
-        f'style subsystem-green extends zone fill=#e3f5e9 use="a subsystem, green; always give WxH"',
-        f'style subsystem-yellow extends zone fill=#fef7e0 use="a subsystem, yellow; always give WxH"',
-        f'style on-premises extends zone fill=#ffffff stroke=ink sw=1 dash=4,3 {T_} use="systems outside Google Cloud; always give WxH"',
+        'style project extends zone fill=#aecbfa use="a Google Cloud project: a light blue panel; always give WxH"',
+        'style region extends zone fill=#f1f3f4 use="a region: a grey panel; always give WxH"',
+        'style gke-cluster extends zone fill=#669df6 use="a GKE cluster: a blue panel; always give WxH"',
+        'style namespace extends zone fill=#ffeebd use="a Kubernetes namespace or a tenant: a yellow panel; always give WxH"',
+        'style service-group extends zone fill=#ffffff use="a service and what runs in it: a white panel; always give WxH"',
+        'style google-cloud extends zone fill=#4285f4 title.align=left title.size=14 title.weight=500 title.color=#ffffff use="the Google Cloud boundary: a blue panel with the name in white; always give WxH"',
+        'style vpc extends zone fill=none dash=6,5 use="a VPC network: a dashed frame; always give WxH"',
+        'style on-premises extends zone fill=#ffffff dash=6,5 use="systems outside Google Cloud: a dashed frame; always give WxH"',
+        'style subsystem-blue extends zone fill=#e8f0fe dash=4,3 use="a subsystem: a pale blue panel with a dashed outline; always give WxH"',
+        'style subsystem-green extends zone fill=#e3f5e9 dash=4,3 use="a subsystem: a pale green panel with a dashed outline; always give WxH"',
     ]
-    head = ['Google Cloud: drawn the way Google Cloud\'s Architecture Center draws diagrams. White and pastel cards with rounded',
-            'corners and crisp dark outlines, data as a stack of cards, subsystems as pastel panels with a dashed outline, the',
-            'Google Cloud boundary as a solid blue panel holding grey region and project panels, black lines, Google Sans, and',
-            'Google Cloud\'s product icons (icon=bigquery, icon=gke). Same style names as the built-in look.']
+    head = ['Google Cloud: drawn the way Google Cloud\'s architecture docs draw diagrams (the Enterprise Application Blueprint).',
+            'White cards with heavy dark outlines and the product icon on the left, data as a card with a grey card behind it,',
+            'nested panels with the name centred at the top (a project light blue, a region grey, a GKE cluster blue, a namespace',
+            'yellow), dark lines with open heads, dashed for the control plane, Google Sans, and Google Cloud\'s product icons',
+            '(icon=bigquery, icon=gke). Same style names as the built-in look.']
     base_url = 'https://cdn.jsdelivr.net/npm/gcp-icons@1.0.6/dist/icons/'
     settings = ['canvas paper=paper dots=none', '', *colours(c), '', *fonts('Google Sans 18pt'), '',
                 '// Google Cloud\'s product and category icons (the gcp-icons package, at a fixed version), by their names',
                 f'icondir "{base_url}{{name}}-512-color.svg"', 'icons builtin=hidden']
     icons = [f'icon {n} "{base_url}{n}-512-color-rgb.svg"' for n in GCP_RGB]
     guidance = ['Icons are Google Cloud\'s, by name: icon=cloudrun, computeengine, gke, cloud-storage, cloudsql, cloudspanner, alloydb, bigquery, vertexai, apigee, looker, networking. The set has 45 product and category icons; fastdraw icons <look> lists them.',
-                'Draw the boundary as google-cloud with a region or project panel inside it, leaving 40px at the top of google-cloud for its name; zone, subsystem-green and subsystem-yellow are subsystems.']
+                'Nest panels as Google Cloud does: project, then region, then gke-cluster, then namespace, then service-group; leave 32px at the top of each panel for its name. Draw the control plane with style=return (dashed) and say so in a legend.']
     return build(base, edits, groups, head, settings, icons, guidance)
+
 
 # ---- Kubernetes -------------------------------------------------------------------------------------------
 # The project's own resource icons (kubernetes/community, Apache 2.0) by their short names, at a fixed commit.

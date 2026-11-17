@@ -1,15 +1,23 @@
 look "../aws.look"
-text "Orders" at 40,40 style=h1
-cloud: aws-cloud "AWS Cloud" at 216,88 936x360
-region: region "eu-west-1" at 240,120 888x312
-users: external "Customers" sub="browser, app" at 40,184
-cf: node "Amazon CloudFront" sub="CDN, WAF" at 264,184 icon=cloudfront
-api: node "Amazon API Gateway" sub="REST" at 496,184 icon=api-gateway
-fn: focal "AWS Lambda" sub="Orders" at 728,184 icon=lambda
-db: store "Amazon DynamoDB" sub="Orders table" at 960,184 icon=dynamodb
-q: node "Amazon SQS" sub="Order events" at 728,320 icon=sqs
-users -> cf style=link
-cf -> api
-api -> fn "POST" style=primary
-fn -> db "writes" style=primary
-fn.bottom -> q.top "publishes"
+cloud: aws-cloud "AWS Cloud" at 40,40 1128x488
+acct: cloud-group "Customer's AWS Account" at 72,96 1064x400
+auth: zone "Authentication" at 248,128 232x160
+cg: node "Amazon Cognito" sub="Users" at 292,168 icon=cognito
+user: external "User" sub="browser" at 96,328 icon=user
+cf: node "Amazon CloudFront" sub="Web console" at 288,328 icon=cloudfront
+api: node "AWS AppSync" sub="GraphQL API" at 520,168 icon=appsync
+fn: focal "AWS Lambda" sub="Task manager" at 752,168 icon=lambda
+db: store "Amazon DynamoDB" sub="Tasks" at 752,328 icon=dynamodb
+wf: zone "AWS Step Functions" at 944,128 184x336 icon=step-functions
+run: node "AWS Fargate" sub="Workers" at 964,184 icon=fargate
+s3: store "Amazon S3" sub="Destination" at 964,328 icon=s3
+c1: callout "1" at 248,344
+c2: callout "2" at 480,184
+c3: callout "3" at 900,184
+user.right -> cf.left style=link
+user.top -> cg.left
+cf.right -> api.bottom "GraphQL" style=link
+api -> fn style=primary
+fn -> db "writes"
+fn -> run style=primary
+run -> s3 "copies"
