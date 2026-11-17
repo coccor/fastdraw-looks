@@ -87,7 +87,7 @@ Thick routes with stops, like a network map.
 
 Engraved, Keys, Listing, Offset and Transit are written by `tools/gen-looks.py`, which keeps their style names in step with each other; edit it and run `python3 tools/gen-looks.py`. Headline is edited by hand.
 
-The cloud looks are written by `tools/gen-cloud-looks.py` from `tools/base.look` (the built-in look's styles) and `tools/aws-icons.txt` (the files in `aws-icons@3.3.0`); run `python3 tools/gen-cloud-looks.py`. The diagrams in `previews/` draw the preview images: `fastdraw render previews/aws.fdraw --no-embed --scale 1`.
+The cloud looks are written by `tools/gen-cloud-looks.py` from `tools/base-styles.txt` (the built-in look's styles) and `tools/aws-icons.txt` (the files in `aws-icons@3.3.0`); run `python3 tools/gen-cloud-looks.py`. The diagrams in `previews/` draw the preview images: `fastdraw render previews/aws.fdraw --no-embed --scale 1`.
 
 ## Making your own
 

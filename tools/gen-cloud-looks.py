@@ -1,4 +1,4 @@
-# Writes azure.look, aws.look and gcp.look: FastDraw's built-in look (tools/base.look) in each cloud's colours and type,
+# Writes azure.look, aws.look and gcp.look: FastDraw's built-in look (tools/base-styles.txt) in each cloud's colours and type,
 # with group styles for the cloud's boundaries and the cloud's own icons in place of the built-in ones.
 # The style names, box sizes and type sizes stay the built-in look's, so a diagram drawn for it switches with one line.
 #   python3 tools/gen-cloud-looks.py
@@ -211,7 +211,7 @@ def gcp(base):
     return build(base, edits, groups, head, settings, icons, guidance)
 
 if __name__ == '__main__':
-    base = open(os.path.join(HERE, 'base.look')).read().split('\n', 3)[3]  # without its two comment lines and the blank one
+    base = open(os.path.join(HERE, 'base-styles.txt')).read().split('\n', 3)[3]  # without its two comment lines and the blank one
     for name, make in [('azure', azure), ('aws', aws), ('gcp', gcp)]:
         open(os.path.join(ROOT, name + '.look'), 'w').write(make(base))
     print('wrote azure.look, aws.look, gcp.look')
