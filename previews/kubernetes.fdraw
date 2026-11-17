@@ -1,5 +1,5 @@
 look "../kubernetes.look"
-users: external "Customers" sub="browser, app" at 488,40
+users: external "Customers" sub="browser, app" at 488,48
 k: cluster "Kubernetes cluster" at 40,136 1152x544
 cp: control-plane "Control Plane" at 64,184 360x472
 n1: k8s-node "Node" at 448,184 720x472
@@ -16,7 +16,7 @@ p2: node "orders-x2kd" sub="10.1.0.5" at 952,304 icon=pod
 l1: k8s-label "app: orders" at 792,440
 l2: k8s-label "app: orders" at 976,440
 sel: selector "app=orders" at 512,584
-users.bottom -> ing.top "HTTPS" style=link
+users.bottom -> ing.top "HTTPS" style=link lpos=600,156
 ing -> svc
 svc.right -> p1.left style=primary
 svc.right -> p2.bottom style=primary
