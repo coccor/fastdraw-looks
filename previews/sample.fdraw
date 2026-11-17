@@ -1,0 +1,16 @@
+text "Checkout" at 40,44 style=h1
+edge: zone "Edge" at 216,80 192x272
+data: zone "Data" at 744,80 192x272
+shop: external "Web shop" sub="browser" at 40,112 icon=browser
+gw: node "API gateway" sub="auth, rate limits" at 240,112 icon=gateway
+co: focal "Checkout" sub="prices, reserves stock" at 520,112 icon=cart
+db: store "Orders DB" sub="Postgres" at 768,112 icon=database
+cat: node "Catalog" sub="products, stock" at 520,256 icon=list
+cache: store "Cache" sub="Redis" at 768,256 icon=cache
+pay: external "Payments" sub="card provider" at 984,112 icon=payment
+shop -> gw style=link
+gw -> co "POST /orders" style=primary
+co -> db "writes" style=primary
+gw.bottom -> cat.left "browse" lpos=464,278
+cat -> cache "reads"
+co.top -> pay.top "charges"

@@ -1,0 +1,77 @@
+// Engraved: a plate from an old technical book. Double rules round every box, shadows cut in fine lines,
+// a tall serif title and italic notes on the lines, a black plate for the subject and a red double line
+// for the main path. Same style names as the built-in look.
+
+canvas paper=paper
+
+color paper    #f3eee2
+color card     #fbf8f0
+color block    #e7dfcd
+color ink      #1c1814
+color muted    #5d554a
+color soft     #9a8f7f
+color accent   #b3261a
+color link     #1c1814
+color teal     #2f6f62
+color amber    #a8742a
+color rose     #b3261a
+color violet   #5b4a8a
+
+font sans  "Newsreader"
+font mono  "Geist Mono"
+font serif "Instrument Serif"
+
+// ---- boxes -----------------------------------------------------------------
+style node shape=rect radius=0 size=144x64 fill=card stroke=ink sw=1.2 inner=ink inner.gap=3.5 inner.sw=0.5 shade=ink shade.gap=3 shade.sw=0.7
+    title.size=12.5 sub.font=serif sub.italic=1 sub.size=11.5 sub.color=ink/0.8 tag.color=ink tag.border=ink/0.5 tag.font=mono icon.color=ink use="default box: a backend, service, component or step"
+style focal extends node fill=ink inner=paper shade.gap=2.2 shade.sw=0.9 title.color=paper sub.color=paper/0.85
+    tag.color=paper tag.border=paper/0.6 icon.color=paper ghost.color=paper/0.14 use="the one or two elements the diagram is about"
+style store extends node shape=path path="M0,0.1 C0,-0.035 1,-0.035 1,0.1 L1,0.9 C1,1.035 0,1.035 0,0.9 Z M0,0.1 C0,0.235 1,0.235 1,0.1 C1,0.235 0,0.235 0,0.1" inner=none use="something that holds data or state"
+style cloud extends node fill=block use="a hosted or third-party platform"
+style external extends node fill=paper sw=0.9 dash=1.2,3 inner=none shade=none use="a person or system outside what you own"
+style optional extends node fill=paper sw=0.9 dash=4,3 inner=none shade=none use="optional or asynchronous participant"
+style sticky extends node size=120x120 fill=#ead9a0 title.font=serif title.italic=1 title.size=15 title.weight=400 use="a yellow sticky note: an idea, comment or open question"
+style sticky-orange extends sticky fill=#e9c4b0 use="an orange sticky note: a risk or issue"
+style sticky-violet extends sticky fill=#d9d0e6 use="a violet sticky note: a decision or note"
+
+// ---- flowchart shapes ------------------------------------------------------
+style step extends node size=160x48 use="flowchart action"
+style terminal extends node radius=24 size=160x48 use="flowchart start or end"
+style terminal-focal extends terminal fill=ink inner=paper title.color=paper sub.color=paper/0.85 use="the flowchart outcome that matters most"
+style decision shape=diamond size=200x96 fill=card stroke=ink sw=1.2 shade=ink shade.gap=3 shade.sw=0.7 title.size=12.5 use="flowchart yes/no question; put the text on two short lines"
+
+// ---- regions and markers ---------------------------------------------------
+style zone shape=rect radius=0 fill=none hatch=ink/0.4 hatch.gap=5 hatch.sw=0.45 stroke=ink sw=0.8 corners=square layer=back
+    title.pos=top title.dy=-11 title.font=sans title.size=11 title.weight=500 title.color=ink title.spacing=0.2 title.caps=1 use="a labelled region drawn behind a group of boxes; always give WxH"
+style bar shape=rect radius=0 size=8x80 fill=ink stroke=ink sw=1 use="sequence diagram activation bar, centred on a lifeline; always give WxH"
+style table shape=table radius=0 fill=card stroke=ink sw=1.2 shade=ink shade.gap=3 shade.sw=0.7 head.fill=block rule=ink/0.18
+    title.size=12.5 cell.font=mono cell.size=10 detail.color=muted use="an entity, class or database table: a header and rows. One line per row: | id \"name\" \"type\" \"key\". Arrows can end on a row: orders.user_id -> users.id"
+style matrix extends table align=center grid=1 cell.font=sans use="a grid of values: first row with |= for the column headings, first cell of each row is its name"
+style chart shape=chart fill=none stroke=ink sw=1 mask=0 bar.radius=0 grid.color=ink/0.12
+    tick.font=mono tick.size=9 tick.color=muted use="axes with your numbers drawn for you: chart at x,y WxH x=\"Q1,Q2,Q3\" y=0..100, then a line per series: | bars \"Revenue\" 42 61 75"
+
+// ---- lines -----------------------------------------------------------------
+style arrow line stroke=ink sw=0.95 route=ortho radius=0 head.size=1.15 label.font=sans label.italic=1 label.size=10 label.color=ink label.spacing=0 label.caps=0 use="default arrow"
+style primary extends arrow stroke=accent sw=4.2 double=paper double.sw=1.8 head.size=1.5 label.color=accent use="the main path; at most two per diagram"
+style link extends arrow use="an HTTP or API request crossing a boundary"
+style return extends arrow dash=1.2,3.2 use="a response, or something optional or asynchronous"
+style relation extends relation stroke=ink label.font=sans label.italic=1 label.size=10 label.spacing=0 label.caps=0
+style lifeline line head=none stroke=ink/0.5 sw=0.8 dash=1.2,3 route=straight use="sequence diagram lifeline"
+style rule line head=none stroke=ink/0.45 sw=0.7 route=straight use="thin separator, e.g. above a legend"
+
+// ---- text ------------------------------------------------------------------
+style h1 text font=serif size=36 weight=400 color=ink use="diagram title"
+style kicker text font=sans size=10 weight=500 color=accent spacing=0.2 caps=1 use="optional: a short category above the title, e.g. PROCESS"
+style dek text font=serif italic=1 size=16 color=ink use="optional: one line under the title saying what the diagram shows"
+style eyebrow text font=sans size=9 weight=500 color=ink spacing=0.18 caps=1 use="small caps label, e.g. LEGEND"
+style caption text font=sans size=10 color=muted use="small explanatory text"
+style legend extends legend rule=ink/0.4 title.font=sans title.size=9 item.font=sans item.size=10.5 item.color=ink
+style note text font=serif italic=1 size=15 color=ink use="a short aside; at most two"
+style small text font=mono size=9 color=muted use="technical detail: a port, path or command"
+
+guidance "focal, terminal-focal and primary are the accent. Use the accent on at most two things in one diagram."
+guidance "Never fill a shape with ink to make it stand out; use focal."
+guidance "tag= is a 3 or 4 letter type marker in the corner of a box (EXT, EDGE, API, DB). Use it on architecture boxes, not flowchart shapes."
+guidance "sub= is a short second line of detail: a product name, path, port or protocol. Names of things go in the main text."
+guidance "kicker and dek are optional. Add a kicker only when the diagram belongs to a named category, and a dek only when there is one clear message; most diagrams need neither."
+guidance "Finish with a legend: one statement, 'legend at x,y' followed by style=\"what it means\" for each style you used."
