@@ -1,0 +1,97 @@
+// Print: black and greys on white, for a printer or a PDF read in greyscale. The subject has a heavy double rule,
+// data stores a halftone, the main path a heavier line, requests an open arrowhead and responses a dashed one, so
+// nothing depends on colour. Libre Franklin, with a Newsreader title. Same style names as the built-in look.
+
+canvas paper=paper dots=none
+
+color paper  #ffffff
+color card   #ffffff
+color ink    #111111
+color muted  #4a4a4a
+color soft   #8a8a8a
+color accent #111111
+color link   #333333
+color teal   #555555
+color amber  #666666
+color rose   #444444
+color violet #777777
+
+font sans  "Libre Franklin"
+font mono  "Geist Mono"
+font serif "Newsreader"
+
+// ---- boxes ----------------------------------------------------------------
+style node shape=rect radius=2 size=144x64 fill=#ffffff stroke=ink sw=0.8 sub.font=sans sub.color=muted
+    tag.color=ink tag.border=ink/0.5 tag.font=mono icon.color=ink icon.fill=ink/0.08
+    use="default box: a backend, service, component or step"
+style focal extends node fill=#ffffff stroke=ink sw=2 title.color=ink inner=ink inner.gap=3 inner.sw=0.6
+    tag.color=ink tag.border=ink ghost.color=ink/0.08
+    use="the one or two elements the diagram is about"
+style store extends node fill=#ffffff shape=path stroke=ink icon.color=ink icon.fill=ink/0.08 tag.color=ink tag.border=ink/0.5 sw=0.8 halftone=ink/0.2 halftone.gap=4 halftone.r=0.6
+    path="M0,0.1 C0,-0.035 1,-0.035 1,0.1 L1,0.9 C1,1.035 0,1.035 0,0.9 Z M0,0.1 C0,0.235 1,0.235 1,0.1 C1,0.235 0,0.235 0,0.1"
+    use="something that holds data or state"
+style cloud extends node fill=#f0f0f0 stroke=ink icon.color=ink icon.fill=ink/0.08 tag.color=ink tag.border=ink/0.5 sw=0.8
+    use="a hosted or third-party platform"
+style external extends node fill=#ffffff stroke=ink/0.8 dash=4,3 icon.color=ink icon.fill=ink/0.06
+    use="a person or system outside what you own"
+style optional extends node fill=#ffffff stroke=ink/0.6 dash=1.5,2.5 tag.color=muted tag.border=ink/0.18
+    use="optional or asynchronous participant"
+style sticky extends node radius=4 size=120x120 fill=#f2f2f2 stroke=ink/0.5 tag.color=ink tag.border=ink/0.3
+    use="a yellow sticky note: an idea, comment or open question"
+style sticky-orange extends sticky fill=#ffffff stroke=ink/0.5 hatch=ink/0.22 use="an orange sticky note: a risk or issue"
+style sticky-violet extends sticky fill=#ffffff stroke=ink/0.5 halftone=ink/0.2 use="a violet sticky note: a decision or note"
+
+// ---- flowchart shapes -----------------------------------------------------
+style step extends node size=160x48 use="flowchart action"
+style terminal extends node radius=24 size=160x48 fill=#ffffff stroke=ink sw=0.8
+    use="flowchart start or end"
+style terminal-focal extends terminal fill=#ffffff stroke=ink sw=2 title.color=ink inner=ink inner.sw=0.6
+    use="the flowchart outcome that matters most"
+style decision shape=diamond size=200x96 fill=#ffffff stroke=ink sw=0.8
+    use="flowchart yes/no question; put the text on two short lines"
+
+// ---- regions and markers --------------------------------------------------
+style zone shape=rect radius=2 fill=#f6f6f6 stroke=ink/0.45 sw=0.6 layer=back
+    title.pos=top title.align=left title.font=mono title.size=9 title.weight=400 title.color=ink/0.7 title.spacing=0.12 title.caps=1
+    use="a labelled region drawn behind a group of boxes; always give WxH"
+style bar shape=rect radius=2 size=8x80 fill=#e6e6e6 stroke=ink sw=0.8
+    use="sequence diagram activation bar, centred on a lifeline; always give WxH"
+
+style table shape=table radius=2 fill=#ffffff stroke=ink sw=0.8 head.fill=#ececec rule=ink/0.2
+    cell.font=mono cell.size=10 detail.color=muted
+    use="an entity, class or database table: a header and rows. One line per row: | id \"name\" \"type\" \"key\". Arrows can end on a row: orders.user_id -> users.id"
+style matrix extends table align=center grid=1 cell.font=sans
+    use="a grid of values: first row with |= for the column headings, first cell of each row is its name"
+style chart shape=chart fill=none stroke=ink sw=1 mask=0 bar.radius=2 grid.color=ink/0.08
+    tick.font=mono tick.size=9 tick.color=muted
+    use="axes with your numbers drawn for you: chart at x,y WxH x=\"Q1,Q2,Q3\" y=0..100, then a line per series: | bars \"Revenue\" 42 61 75"
+
+// ---- lines ----------------------------------------------------------------
+style arrow line stroke=ink sw=1 route=ortho radius=4 label.font=sans label.size=10 label.color=ink/0.75 label.spacing=0 label.caps=0
+    use="default arrow"
+style primary extends arrow stroke=ink sw=2.4 label.color=ink label.weight=600 use="the main path; at most two per diagram"
+style link extends arrow stroke=ink label.color=ink/0.75 head=open use="an HTTP or API request crossing a boundary"
+style return extends arrow dash=4,3 use="a response, or something optional or asynchronous"
+style relation extends relation stroke=ink/0.8 label.font=sans label.size=10 label.spacing=0 label.caps=0
+style lifeline line head=none stroke=ink/0.4 sw=1 dash=4,4 route=straight use="sequence diagram lifeline"
+style rule line head=none stroke=ink/0.3 sw=1 route=straight use="thin separator, e.g. above a legend"
+
+// ---- text -----------------------------------------------------------------
+style h1 text font=serif size=26 weight=400 spacing=-0.01 color=ink use="diagram title"
+style kicker text font=mono size=10 weight=500 color=ink spacing=0.12 caps=1 use="optional: a short category above the title, e.g. PROCESS"
+style dek text font=sans size=14 color=muted use="optional: one line under the title saying what the diagram shows"
+style eyebrow text font=mono size=8 color=muted spacing=0.14 caps=1 use="small caps label, e.g. LEGEND"
+style caption text font=sans size=9.5 color=muted use="small explanatory text"
+style legend extends legend rule=ink/0.3 title.font=mono item.size=9.5
+style note text font=sans size=13 color=muted use="a short aside; at most two"
+style small text font=mono size=9 color=muted use="technical detail: a port, path or command"
+
+guidance "focal, terminal-focal and primary are the accent. Use the accent on at most two things in one diagram."
+guidance "Never fill a shape with ink to make it stand out; use the accent, or a tint such as accent/0.14."
+guidance "tag= is a 3 or 4 letter type marker in the corner of a box (EXT, EDGE, API, DB). Use it on architecture boxes, not flowchart shapes."
+guidance "sub= is a short second line of detail: a product name, path, port or protocol. Names of things go in the main text."
+guidance "kicker and dek are optional. Add a kicker only when the diagram belongs to a named category, and a dek only when there is one clear message; most diagrams need neither."
+guidance "Finish with a legend: one statement, 'legend at x,y' followed by style=\"what it means\" for each style you used."
+guidance "Made for black and white: things differ by line weight, dashes and the halftone and hatch fills, never by colour; colour values in a diagram print as greys."
+
+// ---- icons ----------------------------------------------------------------------

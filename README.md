@@ -2,7 +2,8 @@
 
 Looks for [FastDraw](https://github.com/coccor/fastdraw) diagrams. A look sets the colours, fonts and drawing style of a diagram; these use the same style names as the built-in look (`node`, `focal`, `store`, `external` and the rest), so any diagram can switch to one without other changes.
 
-- Three cloud looks: **Azure**, **AWS** and **Google Cloud**, each with the cloud's own icons and its groups (VPCs, subnets, resource groups).
+- Cloud looks: **Azure**, **AWS**, **Google Cloud** and **Kubernetes**, each with its own icons and its groups (VPCs, subnets, resource groups, namespaces).
+- Looks for a use: **Print** (black and white), **Blueprint**, **High contrast** (low vision and colour blindness) and **Terminal**.
 - Six styles of drawing: **Engraved**, **Headline**, **Keys**, **Listing**, **Offset** and **Transit**. These used to ship inside FastDraw.
 
 ## Using a look
@@ -41,7 +42,41 @@ Google blue, Roboto, rounded cards, soft grey panels for groups, and Google Clou
 
 ![Google Cloud](previews/gcp.png)
 
-The icons are the clouds' own artwork, under the terms each cloud publishes for using them in architecture diagrams.
+### Kubernetes — `kubernetes.look`
+
+Kubernetes blue, IBM Plex Sans and the project's own resource icons ([kubernetes/community](https://github.com/kubernetes/community/tree/master/icons), Apache 2.0) by kubectl's short names or the full ones (`icon=deploy` or `deployment`, `svc` or `service`, `ing`, `pod`, `sts`, `cm`, `pvc`, `hpa`, `node`, `etcd`). Groups: `cluster`, `namespace`, `k8s-node`, `pod-group`.
+
+![Kubernetes](previews/kubernetes.png)
+
+The icons are the clouds' and projects' own artwork, under the terms each publishes for using them in architecture diagrams.
+
+## Looks for a use
+
+Each restyles every style of the built-in look, not only its colours, and keeps the style names, so a diagram switches with one line. The previews are the checkout diagram, `previews/sample.fdraw`.
+
+### Print — `print.look`
+
+Black and greys on white, for a printer or a PDF read in greyscale. Nothing depends on colour: the subject has a heavy double rule, data stores a halftone, the main path is the heavier line, a request has an open arrowhead and a response a dashed line. Libre Franklin with a Newsreader title.
+
+![Print](previews/print.png)
+
+### Blueprint — `blueprint.look`
+
+A drafting sheet: light lines on deep blue over a dot grid, a plus mark on every corner of a box, line labels and the title lettered in monospace capitals, and pencil yellow for the subject and the main path.
+
+![Blueprint](previews/blueprint.png)
+
+### High contrast — `high-contrast.look`
+
+For readers with low vision or colour blindness. Black on white, lines 2px and heavier, text at a contrast of 7:1 or more, and every style told apart by more than colour: the subject by the heaviest outline, a hosted platform by a double one, a request by long dashes, a response by short ones. Set in [Atkinson Hyperlegible](https://www.brailleinstitute.org/freefont/), drawn to keep similar letters apart.
+
+![High contrast](previews/high-contrast.png)
+
+### Terminal — `terminal.look`
+
+One monospace face (JetBrains Mono) on near-black, square boxes in thin grey, a double border for the subject like a box drawn with line characters, faint scan lines, and phosphor green for the subject and the main path. Monospace is wide, so keep text in boxes short.
+
+![Terminal](previews/terminal.png)
 
 ## Styles of drawing
 
@@ -87,7 +122,7 @@ Thick routes with stops, like a network map.
 
 Engraved, Keys, Listing, Offset and Transit are written by `tools/gen-looks.py`, which keeps their style names in step with each other; edit it and run `python3 tools/gen-looks.py`. Headline is edited by hand.
 
-The cloud looks are written by `tools/gen-cloud-looks.py` from `tools/base-styles.txt` (the built-in look's styles) and `tools/aws-icons.txt` (the files in `aws-icons@3.3.0`); run `python3 tools/gen-cloud-looks.py`. The diagrams in `previews/` draw the preview images: `fastdraw render previews/aws.fdraw --no-embed --scale 1`.
+The cloud looks are written by `tools/gen-cloud-looks.py` and the looks for a use by `tools/gen-purpose-looks.py`, both from `tools/base-styles.txt` (the built-in look's styles) with the helpers in `tools/lookgen.py`; `tools/aws-icons.txt` lists the files in `aws-icons@3.3.0`. Run `python3 tools/gen-cloud-looks.py` and `python3 tools/gen-purpose-looks.py`. The diagrams in `previews/` draw the preview images: `fastdraw render previews/aws.fdraw --no-embed --scale 1`.
 
 ## Making your own
 

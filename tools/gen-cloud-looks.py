@@ -5,68 +5,9 @@
 import os
 import re
 
-HERE = os.path.dirname(os.path.abspath(__file__))
-ROOT = os.path.join(HERE, '..')
-
-# Fonts from Fontsource, served by jsDelivr at a fixed version (the addresses FastDraw's look guide lists as checked).
-FONTS = {
-    'Open Sans': 'https://cdn.jsdelivr.net/fontsource/fonts/open-sans@5.3.0/latin-{weight}-{style}.ttf',
-    'Inter': 'https://cdn.jsdelivr.net/fontsource/fonts/inter@5.3.0/latin-{weight}-{style}.ttf',
-    'Roboto': 'https://cdn.jsdelivr.net/fontsource/fonts/roboto@5.3.0/latin-{weight}-{style}.ttf',
-}
-
-# ---- statements -------------------------------------------------------------------------------------------
-# The base is a list of statements: a line and the indented lines that continue it, with the comments between.
-
-def statements(text):
-    out = []
-    for line in text.split('\n'):
-        if line.startswith((' ', '\t')) and out and out[-1][0] == 'style':
-            out[-1][1].append(line)
-        elif line.startswith('style '):
-            out.append(('style', [line]))
-        else:
-            out.append(('other', [line]))
-    return out
-
-def style_name(st):
-    return st[1][0].split()[1]
-
-def set_props(st, props):
-    """Sets key=value pairs on a style: replaced where the key is, added to the first line otherwise."""
-    lines = list(st[1])
-    for k, v in props.items():
-        pat = re.compile(r'(?<=\s)' + re.escape(k) + r'=(?:"[^"]*"|\S+)')
-        for i, l in enumerate(lines):
-            if pat.search(l):
-                lines[i] = pat.sub(f'{k}={v}', l, count=1)
-                break
-        else:
-            first = lines[0]
-            m = re.search(r'\s+use="', first)
-            lines[0] = first[:m.start()] + f' {k}={v}' + first[m.start():] if m else first + f' {k}={v}'
-    return ('style', lines)
-
-def build(base, edits, extra_after_zone, head, settings, icons, guidance):
-    sts = statements(base)
-    out = []
-    for st in sts:
-        if st[0] == 'style' and style_name(st) in edits:
-            st = set_props(st, edits[style_name(st)])
-        out.append(st)
-        if st[0] == 'style' and style_name(st) == 'zone':
-            out += [('style', [l]) for l in extra_after_zone]
-    body = '\n'.join(l for st in out for l in st[1]).rstrip('\n')
-    lines = ['// ' + l for l in head] + [''] + settings + [''] + body.split('\n')
-    lines += [f'guidance "{g}"' for g in guidance]
-    lines += ['', '// ---- icons ' + '-' * 70] + icons
-    return '\n'.join(lines) + '\n'
-
-def colours(c):
-    return [f'color {k.ljust(6)} {v}' for k, v in c.items()]
-
-def fonts(sans):
-    return [f'font sans  "{sans}" "{FONTS[sans]}"', 'font mono  "Geist Mono"', 'font serif "Newsreader"']
+import sys
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+from lookgen import HERE, FONTS, build, colours, fonts, base_styles, write  # noqa: E402
 
 # the type of a group's name: the cloud's own diagrams label groups in plain sans, not spaced capitals
 GROUP_TITLE = 'title.font=sans title.size=10 title.weight=600 title.spacing=0 title.caps=0'
@@ -210,8 +151,45 @@ def gcp(base):
                 'Put a system in google-cloud, then project or region panels; on-premises holds what runs outside.']
     return build(base, edits, groups, head, settings, icons, guidance)
 
+# ---- Kubernetes -------------------------------------------------------------------------------------------
+# The project's own resource icons (kubernetes/community, Apache 2.0) by their short names, at a fixed commit.
+K8S = 'https://raw.githubusercontent.com/kubernetes/community/d0476ffb364cd9dc6b007221410db3b50989ebc3/icons/svg/'
+K8S_RESOURCES = ['c-role', 'cm', 'crb', 'crd', 'cronjob', 'deploy', 'ds', 'ep', 'group', 'hpa', 'ing', 'job', 'limits', 'netpol', 'ns', 'pod',
+                 'psp', 'pv', 'pvc', 'quota', 'rb', 'role', 'rs', 'sa', 'sc', 'secret', 'sts', 'svc', 'user', 'vol']
+K8S_INFRA = ['control-plane', 'etcd', 'node']
+# the full names of the resources whose icon files are named by kubectl's short form
+K8S_LONG = {'cluster-role': 'c-role', 'configmap': 'cm', 'cluster-role-binding': 'crb', 'deployment': 'deploy', 'daemonset': 'ds',
+            'endpoints': 'ep', 'ingress': 'ing', 'limit-range': 'limits', 'network-policy': 'netpol', 'namespace': 'ns',
+            'pod-security-policy': 'psp', 'persistent-volume': 'pv', 'persistent-volume-claim': 'pvc', 'resource-quota': 'quota',
+            'role-binding': 'rb', 'replicaset': 'rs', 'service-account': 'sa', 'storage-class': 'sc', 'statefulset': 'sts',
+            'service': 'svc', 'volume': 'vol', 'autoscaler': 'hpa'}
+
+def kubernetes(base):
+    c = {'paper': '#ffffff', 'card': '#ffffff', 'ink': '#1f2937', 'muted': '#4b5563', 'soft': '#9ca3af',
+         'accent': '#326ce5', 'link': '#0f766e', 'teal': '#0d9488', 'amber': '#b45309', 'rose': '#be123c', 'violet': '#6d28d9'}
+    edits = common_edits(6, '#ebf1fd', '#f0f9f8', 'link/0.45')
+    groups = [
+        f'style cluster extends zone stroke=#326ce5 sw=1.4 {GROUP_TITLE} title.color=#2457c5 use="a Kubernetes cluster; always give WxH"',
+        f'style namespace extends zone fill=#326ce5/0.04 stroke=#326ce5/0.7 dash=5,4 {GROUP_TITLE} title.color=#2457c5 use="a namespace; always give WxH"',
+        f'style k8s-node extends zone fill=#f3f4f6 stroke=none {GROUP_TITLE} title.color=muted use="a worker node (a machine in the cluster); always give WxH"',
+        f'style pod-group extends zone stroke=ink/0.35 dash=3,3 {GROUP_TITLE} title.color=muted use="the pods of one workload drawn together; always give WxH"',
+    ]
+    head = ['Kubernetes: FastDraw\'s built-in look in Kubernetes blue, IBM Plex Sans, and the project\'s own resource icons by their',
+            'short names (icon=deploy, icon=svc, icon=ing; or the full names, icon=deployment). Groups for a cluster, a namespace, a worker',
+            'node and the pods of one workload. Same style names as the built-in look.']
+    settings = ['canvas paper=paper dots=none', '', *colours(c), '', *fonts('IBM Plex Sans'), '',
+                '// the resource icons from kubernetes/community (Apache 2.0) at a fixed commit, by kubectl\'s short names',
+                f'icondir "{K8S}resources/unlabeled/{{name}}.svg"',
+                f'    names="{" ".join(K8S_RESOURCES)}"',
+                'icons builtin=hidden']
+    icons = [f'icon {n} "{K8S}infrastructure_components/unlabeled/{n}.svg"' for n in K8S_INFRA]
+    icons += [f'icon {n} "{K8S}resources/unlabeled/{short}.svg"' for n, short in sorted(K8S_LONG.items())]
+    guidance = ['Icons are the Kubernetes project icons, by the kubectl short name or the full one: icon=deploy (deployment), svc (service), ing (ingress), pod, sts (statefulset), ds (daemonset), cm (configmap), secret, pvc, hpa, job, cronjob, ns, node, control-plane, etcd.',
+                'Nest cluster, then namespace; k8s-node shows which machine runs what, pod-group gathers the replicas of one workload.']
+    return build(base, edits, groups, head, settings, icons, guidance)
+
 if __name__ == '__main__':
-    base = open(os.path.join(HERE, 'base-styles.txt')).read().split('\n', 3)[3]  # without its two comment lines and the blank one
-    for name, make in [('azure', azure), ('aws', aws), ('gcp', gcp)]:
-        open(os.path.join(ROOT, name + '.look'), 'w').write(make(base))
-    print('wrote azure.look, aws.look, gcp.look')
+    base = base_styles()
+    for name, make in [('azure', azure), ('aws', aws), ('gcp', gcp), ('kubernetes', kubernetes)]:
+        write(name, make(base))
+    print('wrote azure.look, aws.look, gcp.look, kubernetes.look')

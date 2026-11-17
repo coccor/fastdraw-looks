@@ -1,0 +1,99 @@
+// High contrast: for readers with low vision or colour blindness. Black on white, lines 2px and heavier, text at a
+// contrast of 7:1 or more, and every style told apart by more than its colour: the subject by the heaviest outline, a
+// hosted platform by a double one, a request by long dashes and a response by short ones. Atkinson Hyperlegible, a face
+// drawn to keep similar letters apart. Same style names as the built-in look.
+
+canvas paper=paper dots=none
+
+color paper  #ffffff
+color card   #ffffff
+color ink    #000000
+color muted  #2b2b2b
+color soft   #595959
+color accent #0b3fb5
+color link   #00593c
+color teal   #00593c
+color amber  #7a4100
+color rose   #a1001a
+color violet #4b1fa3
+
+font sans  "Atkinson Hyperlegible" "https://cdn.jsdelivr.net/fontsource/fonts/atkinson-hyperlegible@5.3.0/latin-{weight}-{style}.ttf"
+font mono  "Geist Mono"
+font serif "Newsreader"
+
+// ---- boxes ----------------------------------------------------------------
+style node shape=rect radius=4 size=144x64 fill=#ffffff stroke=ink sw=2 sub.font=sans sub.color=muted title.weight=700
+    tag.color=ink tag.border=ink tag.font=mono icon.color=ink icon.fill=ink/0.10
+    use="default box: a backend, service, component or step"
+style focal extends node fill=#e8eeff stroke=accent sw=3.5 title.color=ink icon.color=accent icon.fill=accent/0.15
+    tag.color=accent tag.border=accent ghost.color=accent/0.10
+    use="the one or two elements the diagram is about"
+style store extends node fill=#ffffff shape=path stroke=ink icon.color=ink icon.fill=ink/0.1 tag.color=ink tag.border=ink sw=2
+    path="M0,0.1 C0,-0.035 1,-0.035 1,0.1 L1,0.9 C1,1.035 0,1.035 0,0.9 Z M0,0.1 C0,0.235 1,0.235 1,0.1 C1,0.235 0,0.235 0,0.1"
+    use="something that holds data or state"
+style cloud extends node fill=#ffffff stroke=link icon.color=link icon.fill=link/0.12 tag.color=link tag.border=link sw=2 inner=link inner.gap=3 inner.sw=1
+    use="a hosted or third-party platform"
+style external extends node fill=#ffffff stroke=ink dash=7,4 icon.color=ink icon.fill=ink/0.08 sw=2
+    use="a person or system outside what you own"
+style optional extends node fill=#ffffff stroke=ink dash=2,3 tag.color=ink tag.border=ink sw=2
+    use="optional or asynchronous participant"
+style sticky extends node radius=4 size=120x120 fill=#fff3b0 stroke=ink tag.color=ink tag.border=ink sw=1.5
+    use="a yellow sticky note: an idea, comment or open question"
+style sticky-orange extends sticky fill=#ffd6d6 stroke=ink use="an orange sticky note: a risk or issue"
+style sticky-violet extends sticky fill=#e4dcff stroke=ink use="a violet sticky note: a decision or note"
+
+// ---- flowchart shapes -----------------------------------------------------
+style step extends node size=160x48 use="flowchart action"
+style terminal extends node radius=24 size=160x48 fill=#ffffff stroke=ink sw=2
+    use="flowchart start or end"
+style terminal-focal extends terminal fill=#e8eeff stroke=accent sw=3.5 title.color=ink
+    use="the flowchart outcome that matters most"
+style decision shape=diamond size=200x96 fill=#ffffff stroke=ink sw=2 title.weight=700
+    use="flowchart yes/no question; put the text on two short lines"
+
+// ---- regions and markers --------------------------------------------------
+style zone shape=rect radius=8 fill=none stroke=ink sw=1.5 layer=back
+    title.pos=top title.align=left title.font=sans title.size=10 title.weight=700 title.color=ink title.spacing=0 title.caps=0
+    use="a labelled region drawn behind a group of boxes; always give WxH"
+style bar shape=rect radius=2 size=8x80 fill=accent/0.2 stroke=accent sw=1.5
+    use="sequence diagram activation bar, centred on a lifeline; always give WxH"
+
+style table shape=table radius=10 fill=#ffffff stroke=ink sw=2 head.fill=#e8eeff rule=ink/0.5 title.weight=700
+    cell.font=mono cell.size=10 detail.color=muted
+    use="an entity, class or database table: a header and rows. One line per row: | id \"name\" \"type\" \"key\". Arrows can end on a row: orders.user_id -> users.id"
+style matrix extends table align=center grid=1 cell.font=sans
+    use="a grid of values: first row with |= for the column headings, first cell of each row is its name"
+style chart shape=chart fill=none stroke=ink sw=1.5 mask=0 bar.radius=2 grid.color=ink/0.25
+    tick.font=mono tick.size=9 tick.color=ink
+    use="axes with your numbers drawn for you: chart at x,y WxH x=\"Q1,Q2,Q3\" y=0..100, then a line per series: | bars \"Revenue\" 42 61 75"
+
+// ---- lines ----------------------------------------------------------------
+style arrow line stroke=ink sw=2 route=ortho radius=8 label.font=sans label.size=10 label.color=ink label.spacing=0 label.caps=0 head.size=1.3 label.weight=700
+    use="default arrow"
+style primary extends arrow stroke=accent sw=3.5 label.color=accent use="the main path; at most two per diagram"
+style link extends arrow stroke=link label.color=link dash=9,4 use="an HTTP or API request crossing a boundary"
+style return extends arrow dash=2,4 cap=round use="a response, or something optional or asynchronous"
+style relation extends relation stroke=ink label.font=sans label.size=10 label.spacing=0 label.caps=0 sw=1.5 label.color=ink
+style lifeline line head=none stroke=ink/0.6 sw=1.5 dash=4,4 route=straight use="sequence diagram lifeline"
+style rule line head=none stroke=ink/0.5 sw=1 route=straight use="thin separator, e.g. above a legend"
+
+// ---- text -----------------------------------------------------------------
+style h1 text font=sans size=26 weight=700 spacing=-0.03 color=ink use="diagram title"
+style kicker text font=mono size=10 weight=700 color=accent spacing=0.12 caps=1 use="optional: a short category above the title, e.g. PROCESS"
+style dek text font=sans size=14 color=muted use="optional: one line under the title saying what the diagram shows"
+style eyebrow text font=mono size=8 color=muted spacing=0.14 caps=1 use="small caps label, e.g. LEGEND"
+style caption text font=sans size=9.5 color=ink use="small explanatory text"
+style legend extends legend rule=ink/0.5 title.font=mono item.size=9.5
+style note text font=sans size=13 color=muted use="a short aside; at most two"
+style small text font=mono size=9 color=muted use="technical detail: a port, path or command"
+
+guidance "focal, terminal-focal and primary are the accent. Use the accent on at most two things in one diagram."
+guidance "Never fill a shape with ink to make it stand out; use the accent, or a tint such as accent/0.14."
+guidance "tag= is a 3 or 4 letter type marker in the corner of a box (EXT, EDGE, API, DB). Use it on architecture boxes, not flowchart shapes."
+guidance "sub= is a short second line of detail: a product name, path, port or protocol. Names of things go in the main text."
+guidance "kicker and dek are optional. Add a kicker only when the diagram belongs to a named category, and a dek only when there is one clear message; most diagrams need neither."
+guidance "Finish with a legend: one statement, 'legend at x,y' followed by style=\"what it means\" for each style you used."
+guidance "Keep it readable without colour: do not add colour as the only difference between things; colours given in a diagram should be dark (contrast 7:1 on white)."
+guidance "The font has regular and bold only: use weight=400 or weight=700."
+
+// ---- icons ----------------------------------------------------------------------
