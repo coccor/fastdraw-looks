@@ -20,7 +20,7 @@ The `fastdraw` command line fetches the look from that address and keeps a copy 
 
 ## Cloud looks
 
-Each is drawn the way that cloud's own documentation draws architecture, with its own icons in place of FastDraw's outlines and extra styles for its groups. The style names stay the built-in look's, so a diagram drawn for it switches with one line; an icon it already uses from FastDraw's set still draws. Azure keeps the built-in box sizes; AWS boxes are 144x104, to hold the icon above the name.
+Each is drawn the way that cloud's own documentation draws architecture, with its own icons in place of FastDraw's outlines and extra styles for its groups. The style names stay the built-in look's, so a diagram drawn for it switches with one line; an icon it already uses from FastDraw's set still draws. Azure keeps the built-in box sizes; AWS boxes are 144x104 and Kubernetes boxes 144x112, to hold the icon above the name.
 
 The icons and the font are fetched by address from jsDelivr, at fixed versions: the editor fetches the ones a diagram uses, and the command line keeps a copy for `--offline`. `fastdraw icons <look>` lists a look's icons, and `fastdraw icons <look> queue` searches them.
 
@@ -44,7 +44,7 @@ As Google Cloud's architecture docs draw it (the Enterprise Application Blueprin
 
 ### Kubernetes — `kubernetes.look`
 
-As kubernetes.io draws it: services and workloads are solid Kubernetes-blue boxes with white text, people and clients grey pills, groups white frames with a grey border (`namespace`), and a `cluster`, its `control-plane` and each `k8s-node` light blue panels, as in the documentation's components diagram; dark lines with labels on grey plates, dotted for requests. Open Sans and the project's own resource icons ([kubernetes/community](https://github.com/kubernetes/community/tree/master/icons), Apache 2.0) by kubectl's short names or the full ones (`icon=deploy` or `deployment`, `svc` or `service`, `ing`, `pod`, `sts`, `cm`, `pvc`, `hpa`, `node`, `etcd`). Also `pod-group`.
+As kubernetes.io draws it, after its Components of Kubernetes and Labels and Selectors diagrams: each resource is the project's blue heptagon with its short name inside and its name under it; a `cluster` is a light blue panel holding a pale `control-plane` panel and darker `k8s-node` panels; a Deployment is a `zone`, a black rounded frame with its icon (`icon=deploy`) on the corner, and its ReplicaSet a `pod-group` inside it; labels and selectors are green and red plates (`k8s-label "app: A"`, `selector "app=A"`). For request flows, as in the Ingress and Gateway diagrams: `step` boxes are solid blue, an `external` client is a grey pill, `style=link` is the dotted request, and line labels sit on grey plates. Open Sans. Icons by kubectl's short names or the full ones (`icon=pod`, `svc` or `service`, `deploy` or `deployment`, `rs`, `sts`, `ing`, `cm`, `pvc`, `hpa`), and the control plane's parts (`api`, `sched`, `c-m`, `c-c-m`, `kubelet`, `k-proxy`, `etcd`, `node`). They are the project's labeled icons ([kubernetes/community](https://github.com/kubernetes/community/tree/master/icons), Apache 2.0), kept in `icons/kubernetes` with the names turned into outlines so they draw in PNG exports too. A resource's box is 144x112. The corner icons need FastDraw's `icon.pos=corner`.
 
 ![Kubernetes](previews/kubernetes.png)
 

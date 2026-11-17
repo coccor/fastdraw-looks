@@ -1,15 +1,26 @@
 look "../kubernetes.look"
-text "Orders" at 40,40 style=h1
-cl: cluster "prod-cluster" at 216,96 936x304
-ns: namespace "orders" at 240,128 888x252
-users: external "Customers" sub="browser, app" at 40,192
-ing: node "Ingress" sub="nginx" at 264,192 icon=ing
-svc: node "orders-svc" sub="ClusterIP" at 496,192 icon=svc
-dep: focal "orders" sub="Deployment, 3 pods" at 728,192 icon=deploy
-db: store "orders-db" sub="StatefulSet" at 960,192 icon=sts
-hpa: node "Autoscaler" sub="2 to 10 pods" at 728,296 icon=hpa
-users -> ing style=link
-ing -> svc "HTTP"
-svc -> dep "routes" style=primary
-dep -> db "writes" style=primary
-hpa.top -> dep.bottom "scales"
+users: external "Customers" sub="browser, app" at 488,40
+k: cluster "Kubernetes cluster" at 40,136 1152x544
+cp: control-plane "Control Plane" at 64,184 360x472
+n1: k8s-node "Node" at 448,184 720x472
+api: node "API server" at 80,232 icon=api
+db: store "etcd" sub="cluster state" at 264,232 icon=etcd
+sch: node "Scheduler" at 80,416 icon=sched
+cm: node "Controllers" sub="controller manager" at 264,416 icon=c-m
+ing: node "Ingress" sub="nginx" at 488,232 icon=ing
+svc: node "orders-svc" sub="ClusterIP" at 488,416 icon=svc
+dep: zone "orders" at 696,224 456x304 icon=deploy
+rs: pod-group "" at 728,280 400x216 icon=rs
+p1: focal "orders-7f9c" sub="10.1.0.4" at 768,304 icon=pod
+p2: node "orders-x2kd" sub="10.1.0.5" at 952,304 icon=pod
+l1: k8s-label "app: orders" at 792,440
+l2: k8s-label "app: orders" at 976,440
+sel: selector "app=orders" at 512,584
+users.bottom -> ing.top "HTTPS" style=link
+ing -> svc
+svc.right -> p1.left style=primary
+svc.right -> p2.bottom style=primary
+api -> db
+api -> sch
+api.bottom -> cm.top
+sel.top -> svc.bottom style=relation

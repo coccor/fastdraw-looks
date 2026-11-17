@@ -1,70 +1,74 @@
-// Kubernetes: drawn the way kubernetes.io draws its diagrams. Services and workloads are solid Kubernetes-blue boxes
-// with white text, people and clients grey pills, groups white frames with a grey border, and a cluster, its control
-// plane and its nodes light blue panels, as in the documentation's components diagram. Dark lines with labels on grey
-// plates, dotted for requests. Open Sans, the project's own icons (icon=deploy, icon=svc). Same style names as the built-in look.
+// Kubernetes: drawn the way kubernetes.io draws its diagrams. Each resource is the project's blue heptagon with its short
+// name inside (pod, svc, deploy, api) and its name under it; a cluster is a light blue panel holding a pale control-plane
+// panel and darker node panels (Components of Kubernetes); a Deployment is a black rounded frame with its icon on the
+// corner, labels and selectors are green and red plates (Labels and Selectors). Flow steps are solid blue boxes, clients
+// grey pills, requests dotted, line labels on grey plates (Ingress, Gateway). Open Sans. Same style names as the built-in
+// look; a resource's box is 144x112, to hold the icon above the name.
 
 canvas paper=paper dots=none
 
 color paper  #ffffff
 color card   #ffffff
-color ink    #333333
+color ink    #000000
 color muted  #555555
 color soft   #999999
 color accent #326ce5
 color link   #333333
 color teal   #0d9488
 color amber  #b45309
-color rose   #be123c
+color rose   #b85450
 color violet #6d28d9
 
 font sans  "Open Sans" "https://cdn.jsdelivr.net/fontsource/fonts/open-sans@5.3.0/latin-{weight}-{style}.ttf"
 font mono  "Geist Mono"
 font serif "Newsreader"
 
-// the resource icons from kubernetes/community (Apache 2.0) at a fixed commit, by kubectl's short names
-icondir "https://raw.githubusercontent.com/kubernetes/community/d0476ffb364cd9dc6b007221410db3b50989ebc3/icons/svg/resources/unlabeled/{name}.svg"
-    names="c-role cm crb crd cronjob deploy ds ep group hpa ing job limits netpol ns pod psp pv pvc quota rb role rs sa sc secret sts svc user vol"
+// the labeled icons of kubernetes/community (Apache 2.0), their names in outline, by kubectl's short names
+icondir "https://raw.githubusercontent.com/coccor/fastdraw-looks/main/icons/kubernetes/{name}.svg"
+    names="c-role cm crb crd cronjob deploy ds ep group hpa ing job limits netpol ns pod psp pv pvc quota rb role rs sa sc secret sts svc user vol control-plane etcd node api c-c-m c-m k-proxy kubelet sched"
 icons builtin=hidden
 
 // ---- boxes ----------------------------------------------------------------
-style node shape=rect radius=0 size=144x64 fill=#326ce5 stroke=none sw=1 sub.font=sans sub.color=#ffffff/0.85 title.weight=600 title.color=#ffffff
-    tag.color=#ffffff tag.border=#ffffff/0.6 tag.font=mono icon.color=#ffffff icon.fill=none
+style node shape=rect radius=0 size=144x112 fill=none stroke=none sw=1 sub.font=sans sub.color=muted icon.pos=top icon.size=56 title.size=13 title.weight=600 title.color=ink sub.size=11
+    tag.color=ink tag.border=ink/0.4 tag.font=mono icon.color=accent icon.fill=accent/0.14
     use="default box: a backend, service, component or step"
-style focal extends node fill=#326ce5 stroke=none sw=2 title.color=#ffffff sub.color=#ffffff/0.85 icon.color=#ffffff icon.fill=none inner=#ffffff inner.gap=3 inner.sw=1.2
-    tag.color=#ffffff tag.border=#ffffff/0.6 ghost.color=accent/0.10
+style focal extends node fill=#e6eefc stroke=none sw=2 title.color=#326ce5 radius=10 icon.pos=top icon.size=56 title.size=13 title.weight=700 sub.font=sans sub.size=11 sub.color=muted
+    tag.color=ink tag.border=ink/0.4 ghost.color=accent/0.10
     use="the one or two elements the diagram is about"
-style store extends node fill=#326ce5 shape=path stroke=none icon.color=#ffffff icon.fill=none tag.color=#ffffff tag.border=#ffffff/0.6 title.color=#ffffff sub.color=#ffffff/0.85
+style store extends node fill=none shape=rect stroke=none icon.color=teal icon.fill=teal/0.14 tag.color=ink tag.border=ink/0.4 radius=0 icon.pos=top icon.size=56 title.size=13 title.weight=600 title.color=ink sub.font=sans sub.size=11 sub.color=muted
     path="M0,0.1 C0,-0.035 1,-0.035 1,0.1 L1,0.9 C1,1.035 0,1.035 0,0.9 Z M0,0.1 C0,0.235 1,0.235 1,0.1 C1,0.235 0,0.235 0,0.1"
     use="something that holds data or state"
-style cloud extends node fill=#dddddd stroke=none icon.color=#000000 icon.fill=none tag.color=#000000 tag.border=#000000/0.4 title.color=#000000 sub.color=muted
+style cloud extends node fill=#326ce5 stroke=none icon.color=#ffffff icon.fill=none tag.color=#ffffff tag.border=#ffffff/0.6 radius=32 title.color=#ffffff title.weight=700 sub.font=sans sub.color=#ffffff/0.85
     use="a hosted or third-party platform"
-style external extends node fill=#dddddd stroke=none dash=none icon.color=#000000 icon.fill=none title.color=#000000 sub.color=muted tag.color=#000000 tag.border=#000000/0.4 radius=32
+style external extends node fill=#dddddd stroke=none dash=none icon.color=#000000 icon.fill=none title.color=#000000 title.weight=400 sub.font=sans sub.color=muted tag.color=#000000 tag.border=#000000/0.4 size=144x56 radius=28 icon.pos=left icon.size=20
     use="a person or system outside what you own"
-style optional extends node fill=#f2f2f2 stroke=#bbbbbb dash=3,3 tag.color=#000000 tag.border=#000000/0.4 title.color=#000000 sub.color=muted icon.color=#000000 icon.fill=none
+style optional extends node fill=none stroke=none dash=3,3 tag.color=ink tag.border=ink/0.4 radius=0 icon.pos=top icon.size=56 title.size=13 title.weight=400 title.color=muted sub.font=sans sub.size=11 sub.color=muted
     use="optional or asynchronous participant"
-style sticky extends node radius=4 size=120x120 fill=#fff7d6 stroke=amber/0.35 tag.color=ink tag.border=ink/0.3 title.color=ink sub.color=muted
+style sticky extends node radius=0 size=120x120 fill=#d5e8d4 stroke=none tag.color=#666666 tag.border=ink/0.3 title.color=#666666 title.weight=400 title.size=13 sub.color=#666666
     use="a yellow sticky note: an idea, comment or open question"
-style sticky-orange extends sticky fill=#ffe4e6 stroke=rose/0.35 use="an orange sticky note: a risk or issue"
-style sticky-violet extends sticky fill=#ede9fe stroke=violet/0.35 use="a violet sticky note: a decision or note"
+style sticky-orange extends sticky fill=#f8cecc stroke=#b85450 sw=1.2 use="an orange sticky note: a risk or issue"
+style sticky-violet extends sticky fill=#ffffff stroke=#d5e8d4 sw=1.5 use="a violet sticky note: a decision or note"
 
 // ---- flowchart shapes -----------------------------------------------------
-style step extends node size=160x48 fill=#326ce5 stroke=none title.color=#ffffff sub.color=#ffffff/0.85 tag.color=#ffffff tag.border=#ffffff/0.6 icon.color=#ffffff icon.fill=none use="flowchart action"
-style terminal extends node radius=24 size=160x48 fill=#dddddd stroke=none title.color=#000000 sub.color=muted tag.color=#000000 tag.border=#000000/0.4 icon.color=#000000 icon.fill=none
+style step extends node size=160x48 radius=0 fill=#326ce5 stroke=none title.color=#ffffff title.weight=700 sub.font=sans sub.color=#ffffff/0.85 tag.color=#ffffff tag.border=#ffffff/0.6 icon.color=#ffffff icon.fill=none use="flowchart action"
+style terminal extends node radius=32 size=160x48 fill=#dddddd stroke=none title.color=#000000 title.weight=400 sub.font=sans sub.color=muted tag.color=#000000 tag.border=#000000/0.4 icon.color=#000000 icon.fill=none
     use="flowchart start or end"
-style terminal-focal extends terminal fill=#326ce5 stroke=none sw=2 title.color=#ffffff sub.color=#ffffff/0.85 tag.color=#ffffff tag.border=#ffffff/0.6 icon.color=#ffffff icon.fill=none inner=#ffffff inner.sw=1.2
+style terminal-focal extends terminal fill=#326ce5 stroke=none sw=2 title.color=#ffffff radius=0 title.weight=700 sub.font=sans sub.color=#ffffff/0.85 tag.color=#ffffff tag.border=#ffffff/0.6 icon.color=#ffffff icon.fill=none inner=#ffffff inner.gap=3 inner.sw=1.2
     use="the flowchart outcome that matters most"
 style decision shape=diamond size=200x96 fill=#dddddd stroke=none sw=1 title.color=#000000
     use="flowchart yes/no question; put the text on two short lines"
 
 // ---- regions and markers --------------------------------------------------
-style zone shape=rect radius=0 fill=#ffffff stroke=#bbbbbb sw=2 layer=back
-    title.pos=top title.align=left title.font=sans title.size=11 title.weight=600 title.color=#326ce5 title.spacing=0 title.caps=0
+style zone shape=rect radius=18 fill=none stroke=#000000 sw=3 layer=back dash=none icon.pos=corner icon.size=48 title.dy=6 title.fill=none
+    title.pos=top title.align=left title.font=sans title.size=13 title.weight=600 title.color=ink title.spacing=0 title.caps=0
     use="a labelled region drawn behind a group of boxes; always give WxH"
-style cluster extends zone radius=10 fill=#d9e6fb stroke=none title.font=sans title.size=11 title.weight=700 title.spacing=0 title.caps=0 title.color=#333333 use="a Kubernetes cluster: a light blue panel; always give WxH"
-style control-plane extends zone radius=10 fill=#eef4fd stroke=none title.font=sans title.size=11 title.weight=700 title.spacing=0 title.caps=0 title.color=#333333 use="the control plane: a pale panel inside a cluster; always give WxH"
-style k8s-node extends zone radius=8 fill=#a3bbe3 stroke=none title.font=sans title.size=11 title.weight=700 title.spacing=0 title.caps=0 title.color=#222222 use="a worker node (a machine in the cluster): a darker blue panel; always give WxH"
-style namespace extends zone use="a namespace: a white frame with a grey border; always give WxH"
-style pod-group extends zone fill=none stroke=#bbbbbb dash=4,3 use="the pods of one workload drawn together; always give WxH"
+style cluster extends zone radius=12 fill=#dbe8fb stroke=none sw=0 icon=none title.font=sans title.weight=700 title.spacing=0 title.caps=0 title.align=left title.size=17 title.color=#333333 title.dy=8 use="a Kubernetes cluster: a light blue panel with its name in large bold type; always give WxH"
+style control-plane extends zone radius=12 fill=#f2f6fd stroke=none sw=0 icon=none title.font=sans title.weight=700 title.spacing=0 title.caps=0 title.align=left title.size=13 title.color=#333333 use="the control plane: a pale panel inside a cluster; always give WxH"
+style k8s-node extends zone radius=10 fill=#9db4de stroke=none sw=0 icon=none title.font=sans title.weight=700 title.spacing=0 title.caps=0 title.align=left title.size=13 title.color=#222222 use="a worker node (a machine in the cluster): a darker blue panel; always give WxH"
+style namespace extends zone radius=0 fill=#ffffff stroke=#bbbbbb sw=2 icon=none title.font=sans title.weight=700 title.spacing=0 title.caps=0 title.align=left title.size=12 title.weight=600 title.color=#326ce5 use="a namespace: a white frame with a grey border, as in the Ingress diagrams; always give WxH"
+style pod-group extends zone radius=14 sw=2.5 icon.size=40 use="what a ReplicaSet or Job owns: a thinner black frame, nested in its Deployment's zone (give it icon=rs); always give WxH"
+style k8s-label extends sticky size=104x32 use="a label on a resource, a green plate: k8s-label \"app: A\" beside the pod"
+style selector extends sticky-orange size=104x32 use="a Service's selector, a red plate: selector \"app=A\" beside the Service"
 style bar shape=rect radius=2 size=8x80 fill=#326ce5/0.2 stroke=#326ce5 sw=1
     use="sequence diagram activation bar, centred on a lifeline; always give WxH"
 
@@ -78,12 +82,12 @@ style chart shape=chart fill=none stroke=ink/0.5 sw=1 mask=0 bar.radius=2 grid.c
     use="axes with your numbers drawn for you: chart at x,y WxH x=\"Q1,Q2,Q3\" y=0..100, then a line per series: | bars \"Revenue\" 42 61 75"
 
 // ---- lines ----------------------------------------------------------------
-style arrow line stroke=ink sw=1.6 route=ortho radius=0 label.font=sans label.size=10 label.color=ink label.spacing=0 label.caps=0 label.fill=#e8e8e8 label.border=none
+style arrow line stroke=#000000 sw=1.8 route=ortho radius=0 label.font=sans label.size=11 label.color=#000000 label.spacing=0 label.caps=0 label.fill=#e8e8e8 label.border=none
     use="default arrow"
-style primary extends arrow stroke=#326ce5 sw=2.2 label.color=#1a4fc4 use="the main path; at most two per diagram"
-style link extends arrow stroke=ink label.color=ink dash=2,3 use="an HTTP or API request crossing a boundary"
+style primary extends arrow stroke=#326ce5 sw=2.4 label.color=#000000 use="the main path; at most two per diagram"
+style link extends arrow stroke=#333333 label.color=#000000 dash=2,3 use="an HTTP or API request crossing a boundary"
 style return extends arrow dash=5,4 use="a response, or something optional or asynchronous"
-style relation extends relation stroke=ink/0.8 label.font=sans label.size=10 label.spacing=0 label.caps=0
+style relation extends relation stroke=#666666 label.font=sans label.size=10 label.spacing=0 label.caps=0 sw=1.6
 style lifeline line head=none stroke=ink/0.20 sw=1 dash=4,4 route=straight use="sequence diagram lifeline"
 style rule line head=none stroke=ink/0.10 sw=1 route=straight use="thin separator, e.g. above a legend"
 
@@ -103,32 +107,34 @@ guidance "tag= is a 3 or 4 letter type marker in the corner of a box (EXT, EDGE,
 guidance "sub= is a short second line of detail: a product name, path, port or protocol. Names of things go in the main text."
 guidance "kicker and dek are optional. Add a kicker only when the diagram belongs to a named category, and a dek only when there is one clear message; most diagrams need neither."
 guidance "Finish with a legend: one statement, 'legend at x,y' followed by style=\"what it means\" for each style you used."
-guidance "Icons are the Kubernetes project icons, by the kubectl short name or the full one: icon=deploy (deployment), svc (service), ing (ingress), pod, sts (statefulset), ds (daemonset), cm (configmap), secret, pvc, hpa, job, cronjob, ns, node, control-plane, etcd."
-guidance "Draw a cluster as cluster, with control-plane and k8s-node panels inside; namespace and zone are plain frames; pod-group gathers the replicas of one workload."
+guidance "Give every resource its icon, by kubectl's short name or the full one: icon=pod, svc (service), deploy (deployment), rs, sts, ds, ing, job, cronjob, cm, secret, pvc, pv, hpa, ns, sa; the control plane's parts are icon=api, sched, c-m, c-c-m, kubelet, k-proxy, etcd, and a machine is icon=node. Resource boxes are 144x112: leave about 144px between rows."
+guidance "Draw a cluster as cluster, with a control-plane panel and k8s-node panels inside. A Deployment and its pods go in a zone with icon=deploy, its ReplicaSet in a pod-group with icon=rs inside it. Put k8s-label plates beside pods and a selector plate beside their Service, joined with style=relation. For a request flow (Ingress, Gateway) use step boxes, an external client and style=link for the request."
 
 // ---- icons ----------------------------------------------------------------------
-icon control-plane "https://raw.githubusercontent.com/kubernetes/community/d0476ffb364cd9dc6b007221410db3b50989ebc3/icons/svg/infrastructure_components/unlabeled/control-plane.svg"
-icon etcd "https://raw.githubusercontent.com/kubernetes/community/d0476ffb364cd9dc6b007221410db3b50989ebc3/icons/svg/infrastructure_components/unlabeled/etcd.svg"
-icon node "https://raw.githubusercontent.com/kubernetes/community/d0476ffb364cd9dc6b007221410db3b50989ebc3/icons/svg/infrastructure_components/unlabeled/node.svg"
-icon autoscaler "https://raw.githubusercontent.com/kubernetes/community/d0476ffb364cd9dc6b007221410db3b50989ebc3/icons/svg/resources/unlabeled/hpa.svg"
-icon cluster-role "https://raw.githubusercontent.com/kubernetes/community/d0476ffb364cd9dc6b007221410db3b50989ebc3/icons/svg/resources/unlabeled/c-role.svg"
-icon cluster-role-binding "https://raw.githubusercontent.com/kubernetes/community/d0476ffb364cd9dc6b007221410db3b50989ebc3/icons/svg/resources/unlabeled/crb.svg"
-icon configmap "https://raw.githubusercontent.com/kubernetes/community/d0476ffb364cd9dc6b007221410db3b50989ebc3/icons/svg/resources/unlabeled/cm.svg"
-icon daemonset "https://raw.githubusercontent.com/kubernetes/community/d0476ffb364cd9dc6b007221410db3b50989ebc3/icons/svg/resources/unlabeled/ds.svg"
-icon deployment "https://raw.githubusercontent.com/kubernetes/community/d0476ffb364cd9dc6b007221410db3b50989ebc3/icons/svg/resources/unlabeled/deploy.svg"
-icon endpoints "https://raw.githubusercontent.com/kubernetes/community/d0476ffb364cd9dc6b007221410db3b50989ebc3/icons/svg/resources/unlabeled/ep.svg"
-icon ingress "https://raw.githubusercontent.com/kubernetes/community/d0476ffb364cd9dc6b007221410db3b50989ebc3/icons/svg/resources/unlabeled/ing.svg"
-icon limit-range "https://raw.githubusercontent.com/kubernetes/community/d0476ffb364cd9dc6b007221410db3b50989ebc3/icons/svg/resources/unlabeled/limits.svg"
-icon namespace "https://raw.githubusercontent.com/kubernetes/community/d0476ffb364cd9dc6b007221410db3b50989ebc3/icons/svg/resources/unlabeled/ns.svg"
-icon network-policy "https://raw.githubusercontent.com/kubernetes/community/d0476ffb364cd9dc6b007221410db3b50989ebc3/icons/svg/resources/unlabeled/netpol.svg"
-icon persistent-volume "https://raw.githubusercontent.com/kubernetes/community/d0476ffb364cd9dc6b007221410db3b50989ebc3/icons/svg/resources/unlabeled/pv.svg"
-icon persistent-volume-claim "https://raw.githubusercontent.com/kubernetes/community/d0476ffb364cd9dc6b007221410db3b50989ebc3/icons/svg/resources/unlabeled/pvc.svg"
-icon pod-security-policy "https://raw.githubusercontent.com/kubernetes/community/d0476ffb364cd9dc6b007221410db3b50989ebc3/icons/svg/resources/unlabeled/psp.svg"
-icon replicaset "https://raw.githubusercontent.com/kubernetes/community/d0476ffb364cd9dc6b007221410db3b50989ebc3/icons/svg/resources/unlabeled/rs.svg"
-icon resource-quota "https://raw.githubusercontent.com/kubernetes/community/d0476ffb364cd9dc6b007221410db3b50989ebc3/icons/svg/resources/unlabeled/quota.svg"
-icon role-binding "https://raw.githubusercontent.com/kubernetes/community/d0476ffb364cd9dc6b007221410db3b50989ebc3/icons/svg/resources/unlabeled/rb.svg"
-icon service "https://raw.githubusercontent.com/kubernetes/community/d0476ffb364cd9dc6b007221410db3b50989ebc3/icons/svg/resources/unlabeled/svc.svg"
-icon service-account "https://raw.githubusercontent.com/kubernetes/community/d0476ffb364cd9dc6b007221410db3b50989ebc3/icons/svg/resources/unlabeled/sa.svg"
-icon statefulset "https://raw.githubusercontent.com/kubernetes/community/d0476ffb364cd9dc6b007221410db3b50989ebc3/icons/svg/resources/unlabeled/sts.svg"
-icon storage-class "https://raw.githubusercontent.com/kubernetes/community/d0476ffb364cd9dc6b007221410db3b50989ebc3/icons/svg/resources/unlabeled/sc.svg"
-icon volume "https://raw.githubusercontent.com/kubernetes/community/d0476ffb364cd9dc6b007221410db3b50989ebc3/icons/svg/resources/unlabeled/vol.svg"
+icon api-server "https://raw.githubusercontent.com/coccor/fastdraw-looks/main/icons/kubernetes/api.svg"
+icon autoscaler "https://raw.githubusercontent.com/coccor/fastdraw-looks/main/icons/kubernetes/hpa.svg"
+icon cloud-controller-manager "https://raw.githubusercontent.com/coccor/fastdraw-looks/main/icons/kubernetes/c-c-m.svg"
+icon cluster-role "https://raw.githubusercontent.com/coccor/fastdraw-looks/main/icons/kubernetes/c-role.svg"
+icon cluster-role-binding "https://raw.githubusercontent.com/coccor/fastdraw-looks/main/icons/kubernetes/crb.svg"
+icon configmap "https://raw.githubusercontent.com/coccor/fastdraw-looks/main/icons/kubernetes/cm.svg"
+icon controller-manager "https://raw.githubusercontent.com/coccor/fastdraw-looks/main/icons/kubernetes/c-m.svg"
+icon daemonset "https://raw.githubusercontent.com/coccor/fastdraw-looks/main/icons/kubernetes/ds.svg"
+icon deployment "https://raw.githubusercontent.com/coccor/fastdraw-looks/main/icons/kubernetes/deploy.svg"
+icon endpoints "https://raw.githubusercontent.com/coccor/fastdraw-looks/main/icons/kubernetes/ep.svg"
+icon ingress "https://raw.githubusercontent.com/coccor/fastdraw-looks/main/icons/kubernetes/ing.svg"
+icon kube-proxy "https://raw.githubusercontent.com/coccor/fastdraw-looks/main/icons/kubernetes/k-proxy.svg"
+icon limit-range "https://raw.githubusercontent.com/coccor/fastdraw-looks/main/icons/kubernetes/limits.svg"
+icon namespace "https://raw.githubusercontent.com/coccor/fastdraw-looks/main/icons/kubernetes/ns.svg"
+icon network-policy "https://raw.githubusercontent.com/coccor/fastdraw-looks/main/icons/kubernetes/netpol.svg"
+icon persistent-volume "https://raw.githubusercontent.com/coccor/fastdraw-looks/main/icons/kubernetes/pv.svg"
+icon persistent-volume-claim "https://raw.githubusercontent.com/coccor/fastdraw-looks/main/icons/kubernetes/pvc.svg"
+icon pod-security-policy "https://raw.githubusercontent.com/coccor/fastdraw-looks/main/icons/kubernetes/psp.svg"
+icon replicaset "https://raw.githubusercontent.com/coccor/fastdraw-looks/main/icons/kubernetes/rs.svg"
+icon resource-quota "https://raw.githubusercontent.com/coccor/fastdraw-looks/main/icons/kubernetes/quota.svg"
+icon role-binding "https://raw.githubusercontent.com/coccor/fastdraw-looks/main/icons/kubernetes/rb.svg"
+icon scheduler "https://raw.githubusercontent.com/coccor/fastdraw-looks/main/icons/kubernetes/sched.svg"
+icon service "https://raw.githubusercontent.com/coccor/fastdraw-looks/main/icons/kubernetes/svc.svg"
+icon service-account "https://raw.githubusercontent.com/coccor/fastdraw-looks/main/icons/kubernetes/sa.svg"
+icon statefulset "https://raw.githubusercontent.com/coccor/fastdraw-looks/main/icons/kubernetes/sts.svg"
+icon storage-class "https://raw.githubusercontent.com/coccor/fastdraw-looks/main/icons/kubernetes/sc.svg"
+icon volume "https://raw.githubusercontent.com/coccor/fastdraw-looks/main/icons/kubernetes/vol.svg"

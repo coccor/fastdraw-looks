@@ -249,76 +249,100 @@ def gcp(base):
 
 
 # ---- Kubernetes -------------------------------------------------------------------------------------------
-# The project's own resource icons (kubernetes/community, Apache 2.0) by their short names, at a fixed commit.
-K8S = 'https://raw.githubusercontent.com/kubernetes/community/d0476ffb364cd9dc6b007221410db3b50989ebc3/icons/svg/'
+# The project's own icons (kubernetes/community, Apache 2.0): the labeled heptagons the documentation draws, with
+# the short name inside. They are kept in this repository with that name turned into outlines (tools/k8s-icons.sh),
+# because a PNG renderer (resvg) draws no text inside an SVG it shows as an image.
+K8S = 'https://raw.githubusercontent.com/coccor/fastdraw-looks/main/icons/kubernetes/'
 K8S_RESOURCES = ['c-role', 'cm', 'crb', 'crd', 'cronjob', 'deploy', 'ds', 'ep', 'group', 'hpa', 'ing', 'job', 'limits', 'netpol', 'ns', 'pod',
                  'psp', 'pv', 'pvc', 'quota', 'rb', 'role', 'rs', 'sa', 'sc', 'secret', 'sts', 'svc', 'user', 'vol']
 K8S_INFRA = ['control-plane', 'etcd', 'node']
-# the full names of the resources whose icon files are named by kubectl's short form
+K8S_CONTROL = ['api', 'c-c-m', 'c-m', 'k-proxy', 'kubelet', 'sched']
+# the full names of the resources and components whose icon files are named by their short form
 K8S_LONG = {'cluster-role': 'c-role', 'configmap': 'cm', 'cluster-role-binding': 'crb', 'deployment': 'deploy', 'daemonset': 'ds',
             'endpoints': 'ep', 'ingress': 'ing', 'limit-range': 'limits', 'network-policy': 'netpol', 'namespace': 'ns',
             'pod-security-policy': 'psp', 'persistent-volume': 'pv', 'persistent-volume-claim': 'pvc', 'resource-quota': 'quota',
             'role-binding': 'rb', 'replicaset': 'rs', 'service-account': 'sa', 'storage-class': 'sc', 'statefulset': 'sts',
             'service': 'svc', 'volume': 'vol', 'autoscaler': 'hpa'}
+K8S_CONTROL_LONG = {'api-server': 'api', 'cloud-controller-manager': 'c-c-m', 'controller-manager': 'c-m', 'kube-proxy': 'k-proxy',
+                    'scheduler': 'sched'}
 
 def kubernetes(base):
-    """Kubernetes as kubernetes.io draws it: solid blue boxes with white text, grey pills, light blue panels."""
-    c = {'paper': '#ffffff', 'card': '#ffffff', 'ink': '#333333', 'muted': '#555555', 'soft': '#999999',
-         'accent': '#326ce5', 'link': '#333333', 'teal': '#0d9488', 'amber': '#b45309', 'rose': '#be123c', 'violet': '#6d28d9'}
-    blue = {'fill': '#326ce5', 'stroke': 'none', 'title.color': '#ffffff', 'sub.color': '#ffffff/0.85', 'tag.color': '#ffffff',
-            'tag.border': '#ffffff/0.6', 'icon.color': '#ffffff', 'icon.fill': 'none'}
-    grey = {'fill': '#dddddd', 'stroke': 'none', 'title.color': '#000000', 'sub.color': 'muted', 'tag.color': '#000000',
-            'tag.border': '#000000/0.4', 'icon.color': '#000000', 'icon.fill': 'none'}
+    """Kubernetes as kubernetes.io draws it: each resource its blue heptagon with the name under it, a cluster as a
+    light blue panel holding the control plane and the nodes, a Deployment as a black rounded frame with its icon on the
+    corner, labels on green plates; flow steps as solid blue boxes, clients as grey pills, line labels on grey plates."""
+    c = {'paper': '#ffffff', 'card': '#ffffff', 'ink': '#000000', 'muted': '#555555', 'soft': '#999999',
+         'accent': '#326ce5', 'link': '#333333', 'teal': '#0d9488', 'amber': '#b45309', 'rose': '#b85450', 'violet': '#6d28d9'}
+    # a resource is its heptagon with the name under it, and no box
+    bare = {'radius': '0', 'fill': 'none', 'stroke': 'none', 'icon.pos': 'top', 'icon.size': '56', 'title.size': '13', 'title.weight': '600',
+            'title.color': 'ink', 'sub.font': 'sans', 'sub.size': '11', 'sub.color': 'muted', 'tag.color': 'ink', 'tag.border': 'ink/0.4'}
+    # a step of a flow: the solid blue box of the Ingress and Gateway diagrams
+    blue = {'radius': '0', 'fill': '#326ce5', 'stroke': 'none', 'title.color': '#ffffff', 'title.weight': '700', 'sub.font': 'sans',
+            'sub.color': '#ffffff/0.85', 'tag.color': '#ffffff', 'tag.border': '#ffffff/0.6', 'icon.color': '#ffffff', 'icon.fill': 'none'}
+    grey = {'fill': '#dddddd', 'stroke': 'none', 'title.color': '#000000', 'title.weight': '400', 'sub.font': 'sans', 'sub.color': 'muted',
+            'tag.color': '#000000', 'tag.border': '#000000/0.4', 'icon.color': '#000000', 'icon.fill': 'none'}
     edits = {
-        'node': {'radius': '0', 'sw': '1', 'title.weight': '600', 'sub.font': 'sans', **blue},
-        # the subject: the blue box with a white rule inside it
-        'focal': {**blue, 'inner': '#ffffff', 'inner.gap': '3', 'inner.sw': '1.2'},
-        'store': blue,
-        'cloud': grey,
-        # people and clients are grey pills, as in the documentation's diagrams
-        'external': {**grey, 'radius': '32', 'dash': 'none'},
-        'optional': {**grey, 'fill': '#f2f2f2', 'stroke': '#bbbbbb', 'dash': '3,3'},
-        'sticky': {'fill': '#fff7d6', 'stroke': 'amber/0.35', 'title.color': 'ink', 'sub.color': 'muted', 'tag.color': 'ink'},
-        'sticky-orange': {'fill': '#ffe4e6'},
-        'sticky-violet': {'fill': '#ede9fe'},
-        'step': blue,
-        'terminal': {**grey, 'radius': '24'},
-        'terminal-focal': {**blue, 'inner': '#ffffff', 'inner.sw': '1.2'},
+        'node': {'size': '144x112', **bare},
+        # the subject: the heptagon on a pale blue card, its name in Kubernetes blue
+        'focal': {**bare, 'radius': '10', 'fill': '#e6eefc', 'title.color': '#326ce5', 'title.weight': '700'},
+        'store': {**bare, 'shape': 'rect'},
+        # what lies outside the cluster (a cloud provider's API): a blue pill with white words
+        'cloud': {**blue, 'radius': '32'},
+        # people and clients: the grey pill of the flow diagrams
+        'external': {**grey, 'size': '144x56', 'radius': '28', 'dash': 'none', 'icon.pos': 'left', 'icon.size': '20'},
+        'optional': {**bare, 'title.color': 'muted', 'title.weight': '400'},
+        # labels and selectors: the green and red plates of the Labels and Selectors diagram
+        'sticky': {'radius': '0', 'fill': '#d5e8d4', 'stroke': 'none', 'title.color': '#666666', 'title.weight': '400', 'title.size': '13',
+                   'sub.color': '#666666', 'tag.color': '#666666'},
+        'sticky-orange': {'fill': '#f8cecc', 'stroke': '#b85450', 'sw': '1.2'},
+        'sticky-violet': {'fill': '#ffffff', 'stroke': '#d5e8d4', 'sw': '1.5'},
+        'step': blue, 'terminal': {**grey, 'radius': '32'},
+        'terminal-focal': {**blue, 'inner': '#ffffff', 'inner.gap': '3', 'inner.sw': '1.2'},
         'decision': {'fill': '#dddddd', 'stroke': 'none', 'title.color': '#000000'},
-        # a plain group: a white frame with a grey border and a blue name
-        'zone': {'radius': '0', 'fill': '#ffffff', 'stroke': '#bbbbbb', 'sw': '2', 'title.font': 'sans', 'title.size': '11', 'title.weight': '600',
-                 'title.color': '#326ce5', 'title.spacing': '0', 'title.caps': '0'},
+        # a workload and what it owns: a black rounded frame, its icon on the corner, as a Deployment is drawn
+        'zone': {'radius': '18', 'fill': 'none', 'stroke': '#000000', 'sw': '3', 'dash': 'none', 'icon.pos': 'corner', 'icon.size': '48',
+                 'title.font': 'sans', 'title.size': '13', 'title.weight': '600', 'title.color': 'ink', 'title.spacing': '0', 'title.caps': '0',
+                 'title.align': 'left', 'title.dy': '6', 'title.fill': 'none'},
         'bar': {'fill': '#326ce5/0.2', 'stroke': '#326ce5'},
         'table': {'radius': '0', 'stroke': '#bbbbbb', 'head.fill': '#326ce5/0.12', 'rule': 'ink/0.12'},
-        'arrow': {'stroke': 'ink', 'sw': '1.6', 'radius': '0', 'label.color': 'ink', 'label.fill': '#e8e8e8', 'label.border': 'none'},
-        'primary': {'stroke': '#326ce5', 'sw': '2.2', 'label.color': '#1a4fc4'},
-        # a request between services is dotted, like -.-> in the documentation's diagrams
-        'link': {'stroke': 'ink', 'dash': '2,3', 'label.color': 'ink'},
+        'arrow': {'stroke': '#000000', 'sw': '1.8', 'radius': '0', 'label.color': '#000000', 'label.fill': '#e8e8e8', 'label.border': 'none',
+                  'label.size': '11'},
+        'primary': {'stroke': '#326ce5', 'sw': '2.4', 'label.color': '#000000'},
+        # a request from outside: dotted, as in the Ingress and Gateway diagrams
+        'link': {'stroke': '#333333', 'dash': '2,3', 'label.color': '#000000'},
         'return': {'dash': '5,4'},
-        'relation': {'stroke': 'ink/0.8'},
+        # a selector picking its pods: the grey lines of the Labels and Selectors diagram
+        'relation': {'stroke': '#666666', 'sw': '1.6'},
         'kicker': {'color': '#326ce5'},
     }
-    T_ = 'title.font=sans title.size=11 title.weight=700 title.spacing=0 title.caps=0'
+    T_ = 'icon=none title.font=sans title.weight=700 title.spacing=0 title.caps=0 title.align=left'
     groups = [
-        f'style cluster extends zone radius=10 fill=#d9e6fb stroke=none {T_} title.color=#333333 use="a Kubernetes cluster: a light blue panel; always give WxH"',
-        f'style control-plane extends zone radius=10 fill=#eef4fd stroke=none {T_} title.color=#333333 use="the control plane: a pale panel inside a cluster; always give WxH"',
-        f'style k8s-node extends zone radius=8 fill=#a3bbe3 stroke=none {T_} title.color=#222222 use="a worker node (a machine in the cluster): a darker blue panel; always give WxH"',
-        f'style namespace extends zone use="a namespace: a white frame with a grey border; always give WxH"',
-        f'style pod-group extends zone fill=none stroke=#bbbbbb dash=4,3 use="the pods of one workload drawn together; always give WxH"',
+        f'style cluster extends zone radius=12 fill=#dbe8fb stroke=none sw=0 {T_} title.size=17 title.color=#333333 title.dy=8'
+        ' use="a Kubernetes cluster: a light blue panel with its name in large bold type; always give WxH"',
+        f'style control-plane extends zone radius=12 fill=#f2f6fd stroke=none sw=0 {T_} title.size=13 title.color=#333333'
+        ' use="the control plane: a pale panel inside a cluster; always give WxH"',
+        f'style k8s-node extends zone radius=10 fill=#9db4de stroke=none sw=0 {T_} title.size=13 title.color=#222222'
+        ' use="a worker node (a machine in the cluster): a darker blue panel; always give WxH"',
+        f'style namespace extends zone radius=0 fill=#ffffff stroke=#bbbbbb sw=2 {T_} title.size=12 title.weight=600 title.color=#326ce5'
+        ' use="a namespace: a white frame with a grey border, as in the Ingress diagrams; always give WxH"',
+        'style pod-group extends zone radius=14 sw=2.5 icon.size=40'
+        ' use="what a ReplicaSet or Job owns: a thinner black frame, nested in its Deployment\'s zone (give it icon=rs); always give WxH"',
+        'style k8s-label extends sticky size=104x32 use="a label on a resource, a green plate: k8s-label \\"app: A\\" beside the pod"',
+        'style selector extends sticky-orange size=104x32 use="a Service\'s selector, a red plate: selector \\"app=A\\" beside the Service"',
     ]
-    head = ['Kubernetes: drawn the way kubernetes.io draws its diagrams. Services and workloads are solid Kubernetes-blue boxes',
-            'with white text, people and clients grey pills, groups white frames with a grey border, and a cluster, its control',
-            'plane and its nodes light blue panels, as in the documentation\'s components diagram. Dark lines with labels on grey',
-            'plates, dotted for requests. Open Sans, the project\'s own icons (icon=deploy, icon=svc). Same style names as the built-in look.']
+    head = ['Kubernetes: drawn the way kubernetes.io draws its diagrams. Each resource is the project\'s blue heptagon with its short',
+            'name inside (pod, svc, deploy, api) and its name under it; a cluster is a light blue panel holding a pale control-plane',
+            'panel and darker node panels (Components of Kubernetes); a Deployment is a black rounded frame with its icon on the',
+            'corner, labels and selectors are green and red plates (Labels and Selectors). Flow steps are solid blue boxes, clients',
+            'grey pills, requests dotted, line labels on grey plates (Ingress, Gateway). Open Sans. Same style names as the built-in',
+            'look; a resource\'s box is 144x112, to hold the icon above the name.']
     settings = ['canvas paper=paper dots=none', '', *colours(c), '', *fonts('Open Sans'), '',
-                '// the resource icons from kubernetes/community (Apache 2.0) at a fixed commit, by kubectl\'s short names',
-                f'icondir "{K8S}resources/unlabeled/{{name}}.svg"',
-                f'    names="{" ".join(K8S_RESOURCES)}"',
+                '// the labeled icons of kubernetes/community (Apache 2.0), their names in outline, by kubectl\'s short names',
+                f'icondir "{K8S}{{name}}.svg"',
+                f'    names="{" ".join(K8S_RESOURCES + K8S_INFRA + K8S_CONTROL)}"',
                 'icons builtin=hidden']
-    icons = [f'icon {n} "{K8S}infrastructure_components/unlabeled/{n}.svg"' for n in K8S_INFRA]
-    icons += [f'icon {n} "{K8S}resources/unlabeled/{short}.svg"' for n, short in sorted(K8S_LONG.items())]
-    guidance = ['Icons are the Kubernetes project icons, by the kubectl short name or the full one: icon=deploy (deployment), svc (service), ing (ingress), pod, sts (statefulset), ds (daemonset), cm (configmap), secret, pvc, hpa, job, cronjob, ns, node, control-plane, etcd.',
-                'Draw a cluster as cluster, with control-plane and k8s-node panels inside; namespace and zone are plain frames; pod-group gathers the replicas of one workload.']
+    icons = [f'icon {n} "{K8S}{short}.svg"' for n, short in sorted({**K8S_CONTROL_LONG, **K8S_LONG}.items())]
+    guidance = ['Give every resource its icon, by kubectl\'s short name or the full one: icon=pod, svc (service), deploy (deployment), rs, sts, ds, ing, job, cronjob, cm, secret, pvc, pv, hpa, ns, sa; the control plane\'s parts are icon=api, sched, c-m, c-c-m, kubelet, k-proxy, etcd, and a machine is icon=node. Resource boxes are 144x112: leave about 144px between rows.',
+                'Draw a cluster as cluster, with a control-plane panel and k8s-node panels inside. A Deployment and its pods go in a zone with icon=deploy, its ReplicaSet in a pod-group with icon=rs inside it. Put k8s-label plates beside pods and a selector plate beside their Service, joined with style=relation. For a request flow (Ingress, Gateway) use step boxes, an external client and style=link for the request.']
     return build(base, edits, groups, head, settings, icons, guidance)
 
 if __name__ == '__main__':
