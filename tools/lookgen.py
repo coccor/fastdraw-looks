@@ -18,6 +18,10 @@ FONTS = {
     'Open Sans': 'https://cdn.jsdelivr.net/fontsource/fonts/open-sans@5.3.0/latin-{weight}-{style}.ttf',
     'Inter': 'https://cdn.jsdelivr.net/fontsource/fonts/inter@5.3.0/latin-{weight}-{style}.ttf',
     'Roboto': 'https://cdn.jsdelivr.net/fontsource/fonts/roboto@5.3.0/latin-{weight}-{style}.ttf',
+    # Arial's widths, for AWS (whose diagrams are set in Arial or Amazon Ember)
+    'Arimo': 'https://cdn.jsdelivr.net/fontsource/fonts/arimo@5.3.0/latin-{weight}-{style}.ttf',
+    # the static files name their family after the 18pt optical size
+    'Google Sans 18pt': 'https://cdn.jsdelivr.net/fontsource/fonts/google-sans@5.3.2/latin-{weight}-{style}.ttf',
     'IBM Plex Sans': 'https://cdn.jsdelivr.net/fontsource/fonts/ibm-plex-sans@5.3.0/latin-{weight}-{style}.ttf',
     # regular and bold only: a look that uses it sets every weight to 400 or 700
     'Atkinson Hyperlegible': 'https://cdn.jsdelivr.net/fontsource/fonts/atkinson-hyperlegible@5.3.0/latin-{weight}-{style}.ttf',

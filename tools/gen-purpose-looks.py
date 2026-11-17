@@ -55,45 +55,53 @@ def print_look(base):
     return look(base, head, 'canvas paper=paper dots=none', c, fonts('Libre Franklin'), edits, guidance)
 
 # ---- Blueprint --------------------------------------------------------------------------------------------
-# Light lines on deep blue over a dot grid, drafting marks on the corners, lettering in monospace capitals.
+# A blueprint: white lines on bright blue squared paper. Boxes are outlines with the grid showing through, groups are
+# double-line walls, the subject has a hatched wall down two sides, and everything is the one white.
 def blueprint(base):
-    c = {'paper': '#17457a', 'card': '#17457a', 'ink': '#eaf2fb', 'muted': '#b9cde4', 'soft': '#7f9cc0',
-         'accent': '#ffd56b', 'link': '#9fd8ff', 'teal': '#8fe3d0', 'amber': '#ffcf7a', 'rose': '#ff9b9b', 'violet': '#c9b8ff'}
+    c = {'paper': '#1060c0', 'card': '#1060c0', 'ink': '#ffffff', 'muted': '#dbe8f8', 'soft': '#a8c6ec',
+         'accent': '#ffffff', 'link': '#ffffff', 'teal': '#ffffff', 'amber': '#ffffff', 'rose': '#ffffff', 'violet': '#ffffff'}
+    white = {'title.color': 'ink', 'tag.color': 'ink', 'tag.border': 'ink/0.7', 'icon.color': 'ink', 'icon.fill': 'none'}
     edits = {
-        'node': {'radius': '0', 'fill': 'paper', 'stroke': 'ink', 'sw': '1', 'corners': 'plus', 'corners.color': 'ink/0.8', 'corners.size': '6',
-                 'sub.font': 'sans', 'sub.color': 'muted', 'title.color': 'ink', 'title.weight': '500', 'tag.color': 'ink', 'tag.border': 'ink/0.5',
-                 'icon.color': 'ink', 'icon.fill': 'ink/0.12'},
-        'focal': {'fill': 'paper', 'stroke': 'accent', 'sw': '1.8', 'corners.color': 'accent', 'title.color': 'accent', 'tag.color': 'accent',
-                  'tag.border': 'accent/0.6', 'icon.color': 'accent', 'icon.fill': 'accent/0.15', 'ghost.color': 'accent/0.12'},
-        'store': {'fill': 'paper', 'stroke': 'ink', 'sw': '1', 'icon.color': 'teal', 'icon.fill': 'teal/0.15', 'tag.color': 'teal', 'tag.border': 'teal/0.5'},
-        'cloud': {'fill': 'link/0.08', 'stroke': 'link', 'icon.color': 'link', 'icon.fill': 'link/0.15', 'tag.color': 'link', 'tag.border': 'link/0.5'},
-        'external': {'fill': 'paper', 'stroke': 'ink/0.7', 'dash': '5,4', 'icon.color': 'muted', 'icon.fill': 'ink/0.08'},
-        'optional': {'fill': 'paper', 'stroke': 'ink/0.5', 'dash': '2,3', 'tag.color': 'soft', 'tag.border': 'ink/0.3'},
-        'sticky': {'fill': 'amber/0.12', 'stroke': 'amber/0.7', 'tag.color': 'ink', 'tag.border': 'ink/0.4'},
-        'sticky-orange': {'fill': 'rose/0.12', 'stroke': 'rose/0.7'},
-        'sticky-violet': {'fill': 'violet/0.12', 'stroke': 'violet/0.7'},
-        'terminal': {'fill': 'paper', 'stroke': 'ink'},
-        'terminal-focal': {'fill': 'paper', 'stroke': 'accent', 'sw': '1.8', 'title.color': 'accent'},
-        'decision': {'fill': 'paper', 'stroke': 'ink'},
-        'zone': {'radius': '0', 'fill': 'ink/0.03', 'stroke': 'ink/0.55', 'dash': '8,4', 'title.color': 'ink/0.75'},
-        'bar': {'fill': 'accent/0.15', 'stroke': 'accent'},
-        'table': {'radius': '0', 'fill': 'paper', 'stroke': 'ink/0.8', 'head.fill': 'ink/0.08', 'rule': 'ink/0.2'},
-        'chart': {'stroke': 'ink/0.7', 'grid.color': 'ink/0.12'},
-        'arrow': {'stroke': 'ink/0.85', 'sw': '1', 'radius': '0', 'head': 'open', 'label.font': 'mono', 'label.size': '9',
-                  'label.caps': '1', 'label.spacing': '0.08', 'label.color': 'muted'},
-        'primary': {'stroke': 'accent', 'sw': '1.8', 'label.color': 'accent'},
-        'link': {'stroke': 'link', 'label.color': 'link'},
-        'relation': {'stroke': 'ink/0.8'},
-        'lifeline': {'stroke': 'ink/0.35'},
-        'rule': {'stroke': 'ink/0.25'},
-        'h1': {'font': 'mono', 'size': '24', 'weight': '500', 'spacing': '0.04', 'caps': '1'},
-        'legend': {'rule': 'ink/0.25'},
+        'node': {'radius': '0', 'fill': 'none', 'stroke': 'ink', 'sw': '1.2', 'sub.font': 'sans', 'sub.color': 'muted', 'title.weight': '500', **white},
+        # the subject: a heavier outline with a hatched wall down its right and bottom, like the walls of a plan; it keeps
+        # the paper so the hatching shows only outside it
+        'focal': {'fill': 'paper', 'stroke': 'ink', 'sw': '2', 'shade': 'ink', 'shade.size': '7', 'shade.gap': '3', 'shade.sw': '0.9',
+                  'title.weight': '700', 'ghost.color': 'ink/0.12', **white},
+        'store': {'fill': 'none', 'stroke': 'ink', 'sw': '1.2', **white},
+        # a hosted platform: a double outline
+        'cloud': {'fill': 'none', 'stroke': 'ink', 'sw': '1', 'inner': 'ink', 'inner.gap': '3', 'inner.sw': '0.7', **white},
+        'external': {'fill': 'none', 'stroke': 'ink', 'sw': '1', 'dash': '6,4', **white},
+        'optional': {'fill': 'none', 'stroke': 'ink/0.8', 'sw': '1', 'dash': '2,3', **white},
+        'sticky': {'fill': 'none', 'stroke': 'ink', 'sw': '1', **white},
+        'sticky-orange': {'fill': 'none', 'hatch': 'ink/0.35', 'stroke': 'ink'},
+        'sticky-violet': {'fill': 'none', 'halftone': 'ink/0.35', 'stroke': 'ink'},
+        'terminal': {'fill': 'none', 'stroke': 'ink', 'sw': '1.2'},
+        'terminal-focal': {'fill': 'paper', 'stroke': 'ink', 'sw': '2', 'shade': 'ink', 'shade.size': '7', 'shade.gap': '3', 'shade.sw': '0.9', 'title.color': 'ink'},
+        'decision': {'fill': 'none', 'stroke': 'ink', 'sw': '1.2'},
+        # a group is a room: walls drawn as two parallel lines
+        'zone': {'radius': '0', 'fill': 'none', 'stroke': 'ink', 'sw': '1', 'inner': 'ink', 'inner.gap': '6', 'inner.sw': '1',
+                 'title.font': 'sans', 'title.size': '10', 'title.weight': '500', 'title.color': 'ink', 'title.caps': '1', 'title.spacing': '0.08'},
+        'bar': {'fill': 'ink/0.15', 'stroke': 'ink'},
+        'table': {'radius': '0', 'fill': 'none', 'stroke': 'ink', 'head.fill': 'ink/0.1', 'rule': 'ink/0.35', 'detail.color': 'muted'},
+        'chart': {'fill': 'none', 'stroke': 'ink', 'grid.color': 'ink/0.2', 'tick.color': 'muted'},
+        # thin lines with small solid heads and plain figures, like dimension lines
+        'arrow': {'stroke': 'ink', 'sw': '0.9', 'radius': '0', 'head.size': '0.85', 'label.color': 'ink', 'label.size': '10'},
+        'primary': {'stroke': 'ink', 'sw': '1.8', 'label.color': 'ink', 'label.weight': '600'},
+        'link': {'stroke': 'ink', 'head': 'open', 'label.color': 'ink'},
+        'return': {'dash': '4,3'},
+        'relation': {'stroke': 'ink', 'label.color': 'ink'},
+        'lifeline': {'stroke': 'ink/0.6'},
+        'rule': {'stroke': 'ink/0.5'},
+        'h1': {'size': '24', 'weight': '500', 'spacing': '0.06', 'caps': '1'},
+        'kicker': {'color': 'ink'},
+        'legend': {'rule': 'ink/0.5'},
     }
-    head = ['Blueprint: a drafting sheet. Light lines on deep blue over a dot grid, a plus mark on every corner of a box, line labels',
-            'and the title lettered in monospace capitals, and one pencil yellow for the subject and the main path. Same style names',
-            'as the built-in look.']
-    guidance = ['The page is dark blue: colours given in a diagram should be light, and fills tints (accent/0.1), never solid.']
-    return look(base, head, 'canvas paper=paper dots=ink/0.16 dotgap=16', c, fonts('Geist'), edits, guidance)
+    head = ['Blueprint: white lines on bright blue squared paper, like an architect\'s plan. Boxes are outlines with the grid',
+            'showing through, groups are walls of two parallel lines, the subject has a hatched wall down two sides, and lines',
+            'are thin with small solid heads. Everything is the one white; things differ by weight, dashes and hatching.',
+            'Same style names as the built-in look.']
+    guidance = ['Everything is white on blue: tell things apart by line weight, dashes and hatching, not colour; a colour given in a diagram should be white or a light tint.']
+    return look(base, head, 'canvas paper=paper dots=none grid=ink/0.16 gridgap=24', c, fonts('Geist'), edits, guidance)
 
 # ---- High contrast ----------------------------------------------------------------------------------------
 # For low vision and colour blindness: black on white, heavy lines, and every style told apart by more than colour.

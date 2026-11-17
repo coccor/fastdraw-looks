@@ -1,13 +1,13 @@
 look "../aws.look"
 text "Orders" at 40,40 style=h1
-cloud: aws-cloud "AWS Cloud" at 216,96 936x304
-region: region "eu-west-1" at 240,128 888x252
-users: external "Customers" sub="browser, app" at 40,192
-cf: node "CloudFront" sub="CDN, WAF" at 264,192 icon=cloudfront
-api: node "API Gateway" sub="REST" at 496,192 icon=api-gateway
-fn: focal "Orders" sub="Lambda" at 728,192 icon=lambda
-db: store "Orders table" sub="DynamoDB" at 960,192 icon=dynamodb
-q: node "Order events" sub="SQS" at 728,296 icon=sqs
+cloud: aws-cloud "AWS Cloud" at 216,88 936x360
+region: region "eu-west-1" at 240,120 888x312
+users: external "Customers" sub="browser, app" at 40,184
+cf: node "Amazon CloudFront" sub="CDN, WAF" at 264,184 icon=cloudfront
+api: node "Amazon API Gateway" sub="REST" at 496,184 icon=api-gateway
+fn: focal "AWS Lambda" sub="Orders" at 728,184 icon=lambda
+db: store "Amazon DynamoDB" sub="Orders table" at 960,184 icon=dynamodb
+q: node "Amazon SQS" sub="Order events" at 728,320 icon=sqs
 users -> cf style=link
 cf -> api
 api -> fn "POST" style=primary

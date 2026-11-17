@@ -20,7 +20,7 @@ The `fastdraw` command line fetches the look from that address and keeps a copy 
 
 ## Cloud looks
 
-The built-in look in each cloud's colours and type, on a white page, with the cloud's own service icons in place of FastDraw's outlines and extra styles for the cloud's groups. Boxes and text keep the built-in sizes, so a diagram drawn for the built-in look switches with one line; an icon it already uses from FastDraw's set still draws.
+Each is drawn the way that cloud's own documentation draws architecture, with its own icons in place of FastDraw's outlines and extra styles for its groups. The style names stay the built-in look's, so a diagram drawn for it switches with one line; an icon it already uses from FastDraw's set still draws. Azure keeps the built-in box sizes; AWS boxes are 144x88, to hold the icon above the name.
 
 The icons and the font are fetched by address from jsDelivr, at fixed versions: the editor fetches the ones a diagram uses, and the command line keeps a copy for `--offline`. `fastdraw icons <look>` lists a look's icons, and `fastdraw icons <look> queue` searches them.
 
@@ -32,19 +32,19 @@ Azure blue, Open Sans and 146 Azure service icons by short name (`icon=app-servi
 
 ### AWS — `aws.look`
 
-Squid ink and AWS orange, Inter and all 300 AWS architecture service icons (the [`aws-icons`](https://www.npmjs.com/package/aws-icons) package). Common services have the short names people use (`icon=lambda`, `s3`, `dynamodb`, `rds`, `ec2`, `ecs`, `eks`, `api-gateway`, `cloudfront`, `sqs`, `sns`, `elb`); the rest are named after the service (`app-runner`, `opensearch`). Groups, in the colours AWS gives them: `aws-cloud`, `account`, `region`, `az`, `vpc`, `public-subnet`, `private-subnet`, `security-group`.
+As the AWS documentation draws it: no boxes, each service is its icon with the name under it, people and clients are the generic AWS icons (`icon=users`, `client`, `mobile-client`, `internet`), groups are square panels, and every line is black, the main path heavier. Arimo (Arial's widths) and all 300 AWS architecture service icons (the [`aws-icons`](https://www.npmjs.com/package/aws-icons) package). Common services have the short names people use (`icon=lambda`, `s3`, `dynamodb`, `rds`, `ec2`, `ecs`, `eks`, `api-gateway`, `cloudfront`, `sqs`, `sns`, `elb`); the rest are named after the service (`app-runner`, `opensearch`). Groups, in the colours AWS gives them: `aws-cloud`, `account`, `region`, `az`, `vpc`, `public-subnet`, `private-subnet`, `security-group`, and `optional-group` (dashed).
 
 ![AWS](previews/aws.png)
 
 ### Google Cloud — `gcp.look`
 
-Google blue, Roboto, rounded cards, soft grey panels for groups, and Google Cloud's 45 product and category icons (`icon=cloudrun`, `gke`, `cloudsql`, `bigquery`, `cloud-storage`, `vertexai`; the [`gcp-icons`](https://www.npmjs.com/package/gcp-icons) package). Groups: `google-cloud`, `project`, `region`, `vpc`, `on-premises`.
+As Google Cloud's Architecture Center draws it: white and pastel cards with rounded corners and crisp dark outlines, data as a stack of cards, subsystems as pastel panels with a dashed outline (`zone`, `subsystem-green`, `subsystem-yellow`), and the Google Cloud boundary as a solid blue panel (`google-cloud`) holding grey `region` and `project` panels; black lines. Google Sans and Google Cloud's 45 product and category icons (`icon=cloudrun`, `gke`, `cloudsql`, `bigquery`, `cloud-storage`, `vertexai`; the [`gcp-icons`](https://www.npmjs.com/package/gcp-icons) package). Also `vpc` and `on-premises`.
 
 ![Google Cloud](previews/gcp.png)
 
 ### Kubernetes — `kubernetes.look`
 
-Kubernetes blue, IBM Plex Sans and the project's own resource icons ([kubernetes/community](https://github.com/kubernetes/community/tree/master/icons), Apache 2.0) by kubectl's short names or the full ones (`icon=deploy` or `deployment`, `svc` or `service`, `ing`, `pod`, `sts`, `cm`, `pvc`, `hpa`, `node`, `etcd`). Groups: `cluster`, `namespace`, `k8s-node`, `pod-group`.
+As kubernetes.io draws it: services and workloads are solid Kubernetes-blue boxes with white text, people and clients grey pills, groups white frames with a grey border (`namespace`), and a `cluster`, its `control-plane` and each `k8s-node` light blue panels, as in the documentation's components diagram; dark lines with labels on grey plates, dotted for requests. Open Sans and the project's own resource icons ([kubernetes/community](https://github.com/kubernetes/community/tree/master/icons), Apache 2.0) by kubectl's short names or the full ones (`icon=deploy` or `deployment`, `svc` or `service`, `ing`, `pod`, `sts`, `cm`, `pvc`, `hpa`, `node`, `etcd`). Also `pod-group`.
 
 ![Kubernetes](previews/kubernetes.png)
 
@@ -62,7 +62,7 @@ Black and greys on white, for a printer or a PDF read in greyscale. Nothing depe
 
 ### Blueprint — `blueprint.look`
 
-A drafting sheet: light lines on deep blue over a dot grid, a plus mark on every corner of a box, line labels and the title lettered in monospace capitals, and pencil yellow for the subject and the main path.
+White lines on bright blue squared paper, like an architect's plan. Boxes are outlines with the grid showing through, groups are walls of two parallel lines, the subject has a hatched wall down two sides, and lines are thin with small solid heads. Everything is the one white. The squared paper needs FastDraw's `canvas grid=`.
 
 ![Blueprint](previews/blueprint.png)
 

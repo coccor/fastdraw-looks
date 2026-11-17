@@ -1,75 +1,76 @@
-// AWS: FastDraw's built-in look in the colours of AWS architecture diagrams. A white page, square cards, squid ink
-// and AWS orange for the subject and the main path, Inter, and the AWS architecture icons (icon=lambda, icon=s3).
-// Groups for the AWS Cloud, an account, a Region, an Availability Zone, a VPC, its subnets and a security group,
-// in the colours AWS gives them. Same style names as the built-in look.
+// AWS: drawn the way the AWS documentation draws architecture. No boxes: each service is its AWS icon with the name
+// under it (and a second line under that), people and clients are the generic AWS icons, groups are square panels
+// (grey, or outlined in the colour AWS gives a Region, a VPC or a subnet), and every line is black, the main path
+// heavier. Arimo (Arial's widths). Same style names as the built-in look; a box is 144x88 to hold the icon above the name.
 
 canvas paper=paper dots=none
 
 color paper  #ffffff
 color card   #ffffff
-color ink    #232f3e
+color ink    #000000
 color muted  #545b64
 color soft   #879196
 color accent #ff9900
-color link   #147eb4
+color link   #232f3e
 color teal   #00a4a6
 color amber  #d45b07
 color rose   #dd344c
 color violet #8c4fff
 
-font sans  "Inter" "https://cdn.jsdelivr.net/fontsource/fonts/inter@5.3.0/latin-{weight}-{style}.ttf"
+font sans  "Arimo" "https://cdn.jsdelivr.net/fontsource/fonts/arimo@5.3.0/latin-{weight}-{style}.ttf"
 font mono  "Geist Mono"
 font serif "Newsreader"
 
-// the AWS architecture service icons (the aws-icons package, at a fixed version), each named below
+// the AWS architecture icons (the aws-icons package, at a fixed version), each named below
 icons builtin=hidden
 
 // ---- boxes ----------------------------------------------------------------
-style node shape=rect radius=0 size=144x64 fill=#ffffff stroke=ink/0.14 sw=1 sub.font=sans sub.color=muted icon.size=24
-    tag.color=muted tag.border=ink/0.18 tag.font=mono icon.color=accent icon.fill=accent/0.14
+style node shape=rect radius=0 size=144x88 fill=none stroke=none sw=1 sub.font=sans sub.color=muted icon.pos=top icon.size=36 title.weight=400 title.color=ink
+    tag.color=ink tag.border=ink/0.5 tag.font=mono icon.color=accent icon.fill=accent/0.14
     use="default box: a backend, service, component or step"
-style focal extends node fill=#fff5e6 stroke=accent sw=2 title.color=ink
-    tag.color=accent tag.border=accent/0.4 ghost.color=accent/0.10
+style focal extends node fill=#fff4e5 stroke=none sw=2 title.color=ink icon.pos=top icon.size=36 title.weight=700 sub.font=sans sub.color=muted radius=4
+    tag.color=ink tag.border=ink/0.5 ghost.color=accent/0.10
     use="the one or two elements the diagram is about"
-style store extends node fill=#f5f6f7 shape=path stroke=ink/0.22 icon.color=teal icon.fill=teal/0.14 tag.color=teal tag.border=teal/0.4
+style store extends node fill=none shape=rect stroke=none icon.color=teal icon.fill=teal/0.14 tag.color=ink tag.border=ink/0.5 icon.pos=top icon.size=36 title.weight=400 title.color=ink sub.font=sans sub.color=muted
     path="M0,0.1 C0,-0.035 1,-0.035 1,0.1 L1,0.9 C1,1.035 0,1.035 0,0.9 Z M0,0.1 C0,0.235 1,0.235 1,0.1 C1,0.235 0,0.235 0,0.1"
     use="something that holds data or state"
-style cloud extends node fill=#f2f8fc stroke=link/0.45 icon.color=link icon.fill=link/0.14 tag.color=link tag.border=link/0.4
+style cloud extends node fill=none stroke=none icon.color=link icon.fill=link/0.14 tag.color=ink tag.border=ink/0.5 icon.pos=top icon.size=36 title.weight=400 title.color=ink sub.font=sans sub.color=muted
     use="a hosted or third-party platform"
-style external extends node fill=#eeeeef stroke=ink/0.28 dash=5,4 icon.color=muted icon.fill=ink/0.06
+style external extends node fill=none stroke=none dash=5,4 icon.color=muted icon.fill=ink/0.06 icon.pos=top icon.size=36 title.weight=400 title.color=ink sub.font=sans sub.color=muted tag.color=ink tag.border=ink/0.5 icon=users
     use="a person or system outside what you own"
-style optional extends node fill=#f6f6f6 stroke=ink/0.22 dash=3,3 tag.color=soft tag.border=ink/0.18
+style optional extends node fill=none stroke=ink/0.6 dash=4,3 tag.color=ink tag.border=ink/0.5 icon.pos=top icon.size=36 title.weight=400 title.color=ink sub.font=sans sub.color=muted
     use="optional or asynchronous participant"
-style sticky extends node radius=4 size=120x120 fill=#fff7d6 stroke=amber/0.35 tag.color=ink tag.border=ink/0.3
+style sticky extends node radius=4 size=120x120 fill=#fff7d6 stroke=ink/0.4 tag.color=ink tag.border=ink/0.3 icon.pos=left icon.size=20
     use="a yellow sticky note: an idea, comment or open question"
-style sticky-orange extends sticky fill=#ffe4e6 stroke=rose/0.35 use="an orange sticky note: a risk or issue"
-style sticky-violet extends sticky fill=#ede9fe stroke=violet/0.35 use="a violet sticky note: a decision or note"
+style sticky-orange extends sticky fill=#ffe8d9 stroke=rose/0.35 use="an orange sticky note: a risk or issue"
+style sticky-violet extends sticky fill=#efe7ff stroke=violet/0.35 use="a violet sticky note: a decision or note"
 
 // ---- flowchart shapes -----------------------------------------------------
-style step extends node size=160x48 use="flowchart action"
-style terminal extends node radius=24 size=160x48 fill=#ffffff stroke=ink/0.30
+style step extends node size=160x48 fill=#ffffff stroke=ink sw=1 icon.pos=left icon.size=20 title.weight=600 use="flowchart action"
+style terminal extends node radius=24 size=160x48 fill=#ffffff stroke=ink sw=1 icon.pos=left icon.size=20 title.weight=600
     use="flowchart start or end"
-style terminal-focal extends terminal fill=#fff5e6 stroke=accent sw=2 title.color=ink
+style terminal-focal extends terminal fill=#fff4e5 stroke=accent sw=2 title.color=ink icon.pos=left icon.size=20 title.weight=600
     use="the flowchart outcome that matters most"
-style decision shape=diamond size=200x96 fill=#ffffff stroke=ink/0.30 sw=1
+style decision shape=diamond size=200x96 fill=#ffffff stroke=ink sw=1
     use="flowchart yes/no question; put the text on two short lines"
 
 // ---- regions and markers --------------------------------------------------
-style zone shape=rect radius=0 fill=none stroke=ink/0.35 sw=1 layer=back
-    title.pos=top title.align=left title.font=sans title.size=10 title.weight=600 title.color=ink title.spacing=0 title.caps=0
+style zone shape=rect radius=0 fill=#f2f3f3 stroke=#879196 sw=1 layer=back
+    title.pos=top title.align=left title.font=sans title.size=11 title.weight=400 title.color=ink title.spacing=0 title.caps=0
     use="a labelled region drawn behind a group of boxes; always give WxH"
-style aws-cloud extends zone stroke=#232f3e sw=1.2 title.font=sans title.size=10 title.weight=600 title.spacing=0 title.caps=0 title.color=#232f3e use="the AWS Cloud boundary; always give WxH"
-style account extends zone stroke=#e7157b sw=1.2 title.font=sans title.size=10 title.weight=600 title.spacing=0 title.caps=0 title.color=#e7157b use="an AWS account; always give WxH"
-style region extends zone stroke=#00a4a6 dash=5,4 title.font=sans title.size=10 title.weight=600 title.spacing=0 title.caps=0 title.color=#00a4a6 use="an AWS Region; always give WxH"
-style az extends zone stroke=#00a4a6 dash=4,3 title.font=sans title.size=10 title.weight=600 title.spacing=0 title.caps=0 title.color=#00a4a6 use="an Availability Zone; always give WxH"
-style vpc extends zone stroke=#8c4fff sw=1.2 title.font=sans title.size=10 title.weight=600 title.spacing=0 title.caps=0 title.color=#8c4fff use="a VPC; always give WxH"
-style public-subnet extends zone fill=#7aa116/0.08 stroke=none title.font=sans title.size=10 title.weight=600 title.spacing=0 title.caps=0 title.color=#5a7a10 use="a public subnet inside a VPC; always give WxH"
-style private-subnet extends zone fill=#00a4a6/0.08 stroke=none title.font=sans title.size=10 title.weight=600 title.spacing=0 title.caps=0 title.color=#00777a use="a private subnet inside a VPC; always give WxH"
-style security-group extends zone stroke=#dd344c dash=3,3 title.font=sans title.size=10 title.weight=600 title.spacing=0 title.caps=0 title.color=#dd344c use="a security group; always give WxH"
-style bar shape=rect radius=2 size=8x80 fill=accent/0.10 stroke=accent/0.6 sw=1
+style aws-cloud extends zone fill=none stroke=#232f3e title.font=sans title.size=11 title.weight=400 title.spacing=0 title.caps=0 title.color=#232f3e use="the AWS Cloud boundary; always give WxH"
+style account extends zone fill=none stroke=#e7157b title.font=sans title.size=11 title.weight=400 title.spacing=0 title.caps=0 title.color=#e7157b use="an AWS account; always give WxH"
+style region extends zone fill=none stroke=#00a4a6 dash=5,4 title.font=sans title.size=11 title.weight=400 title.spacing=0 title.caps=0 title.color=#00a4a6 use="an AWS Region; always give WxH"
+style az extends zone fill=none stroke=#00a4a6 dash=4,3 title.font=sans title.size=11 title.weight=400 title.spacing=0 title.caps=0 title.color=#00a4a6 use="an Availability Zone; always give WxH"
+style vpc extends zone fill=none stroke=#8c4fff title.font=sans title.size=11 title.weight=400 title.spacing=0 title.caps=0 title.color=#8c4fff use="a VPC; always give WxH"
+style public-subnet extends zone fill=#f2f6e8 stroke=none title.font=sans title.size=11 title.weight=400 title.spacing=0 title.caps=0 title.color=#5a7a10 use="a public subnet inside a VPC; always give WxH"
+style private-subnet extends zone fill=#e6f6f7 stroke=none title.font=sans title.size=11 title.weight=400 title.spacing=0 title.caps=0 title.color=#00777a use="a private subnet inside a VPC; always give WxH"
+style security-group extends zone fill=none stroke=#dd344c dash=3,3 title.font=sans title.size=11 title.weight=400 title.spacing=0 title.caps=0 title.color=#dd344c use="a security group; always give WxH"
+style optional-group extends zone fill=none stroke=ink dash=4,3 title.font=sans title.size=11 title.weight=400 title.spacing=0 title.caps=0 use="a part that is optional; always give WxH"
+style bar shape=rect radius=2 size=8x80 fill=accent/0.15 stroke=accent sw=1
     use="sequence diagram activation bar, centred on a lifeline; always give WxH"
 
-style table shape=table radius=10 fill=#ffffff stroke=ink/0.16 sw=1 head.fill=accent/0.08 rule=ink/0.08
+style table shape=table radius=0 fill=#ffffff stroke=ink/0.6 sw=1 head.fill=#f2f3f3 rule=ink/0.15
     cell.font=mono cell.size=10 detail.color=muted
     use="an entity, class or database table: a header and rows. One line per row: | id \"name\" \"type\" \"key\". Arrows can end on a row: orders.user_id -> users.id"
 style matrix extends table align=center grid=1 cell.font=sans
@@ -79,12 +80,12 @@ style chart shape=chart fill=none stroke=ink/0.5 sw=1 mask=0 bar.radius=2 grid.c
     use="axes with your numbers drawn for you: chart at x,y WxH x=\"Q1,Q2,Q3\" y=0..100, then a line per series: | bars \"Revenue\" 42 61 75"
 
 // ---- lines ----------------------------------------------------------------
-style arrow line stroke=ink/0.45 sw=1.4 route=ortho radius=8 label.font=sans label.size=10 label.color=muted label.spacing=0 label.caps=0
+style arrow line stroke=ink sw=1.5 route=ortho radius=0 label.font=sans label.size=10 label.color=ink label.spacing=0 label.caps=0 label.italic=1
     use="default arrow"
-style primary extends arrow stroke=accent sw=2 label.color=#d45b07 use="the main path; at most two per diagram"
-style link extends arrow stroke=link label.color=link use="an HTTP or API request crossing a boundary"
+style primary extends arrow stroke=ink sw=2.4 label.color=ink label.weight=600 use="the main path; at most two per diagram"
+style link extends arrow stroke=ink label.color=ink use="an HTTP or API request crossing a boundary"
 style return extends arrow dash=5,4 use="a response, or something optional or asynchronous"
-style relation extends relation stroke=ink/0.5 label.font=sans label.size=10 label.spacing=0 label.caps=0
+style relation extends relation stroke=ink/0.7 label.font=sans label.size=10 label.spacing=0 label.caps=0
 style lifeline line head=none stroke=ink/0.20 sw=1 dash=4,4 route=straight use="sequence diagram lifeline"
 style rule line head=none stroke=ink/0.10 sw=1 route=straight use="thin separator, e.g. above a legend"
 
@@ -104,8 +105,8 @@ guidance "tag= is a 3 or 4 letter type marker in the corner of a box (EXT, EDGE,
 guidance "sub= is a short second line of detail: a product name, path, port or protocol. Names of things go in the main text."
 guidance "kicker and dek are optional. Add a kicker only when the diagram belongs to a named category, and a dek only when there is one clear message; most diagrams need neither."
 guidance "Finish with a legend: one statement, 'legend at x,y' followed by style=\"what it means\" for each style you used."
-guidance "Icons are the AWS architecture icons by short name: icon=lambda, s3, dynamodb, rds, aurora, ec2, ecs, eks, fargate, api-gateway, cloudfront, route53, elb, sqs, sns, eventbridge, step-functions, kinesis, cognito, iam, kms, secrets-manager, cloudwatch. Others are named from the service (app-runner, opensearch). fastdraw icons <look> lists them all."
-guidance "Nest groups the way AWS does: aws-cloud, then region, then vpc, then az, then public-subnet or private-subnet."
+guidance "Each service is its icon with the name under it: give every box an icon (icon=lambda, s3, dynamodb, rds, aurora, ec2, ecs, eks, fargate, api-gateway, cloudfront, route53, elb, sqs, sns, eventbridge, step-functions, kinesis, cognito, iam, kms, secrets-manager, cloudwatch); people and devices are icon=users, user, client, mobile-client, internet. fastdraw icons <look> lists them all."
+guidance "Boxes are 144x88: leave about 120px between rows. Nest groups the way AWS does: aws-cloud, region, vpc, az, then public-subnet or private-subnet; optional-group marks an optional part."
 
 // ---- icons ----------------------------------------------------------------------
 icon acm "https://cdn.jsdelivr.net/npm/aws-icons@3.3.0/icons/architecture-service/AWSCertificateManager.svg"
@@ -408,3 +409,11 @@ icon work-docs-sdk "https://cdn.jsdelivr.net/npm/aws-icons@3.3.0/icons/architect
 icon work-mail "https://cdn.jsdelivr.net/npm/aws-icons@3.3.0/icons/architecture-service/AmazonWorkMail.svg"
 icon work-spaces "https://cdn.jsdelivr.net/npm/aws-icons@3.3.0/icons/architecture-service/AmazonWorkSpaces.svg"
 icon x-ray "https://cdn.jsdelivr.net/npm/aws-icons@3.3.0/icons/architecture-service/AWSXRay.svg"
+icon users "https://cdn.jsdelivr.net/npm/aws-icons@3.3.0/icons/resource/Users.svg"
+icon user "https://cdn.jsdelivr.net/npm/aws-icons@3.3.0/icons/resource/User.svg"
+icon client "https://cdn.jsdelivr.net/npm/aws-icons@3.3.0/icons/resource/Client.svg"
+icon mobile-client "https://cdn.jsdelivr.net/npm/aws-icons@3.3.0/icons/resource/Mobileclient.svg"
+icon internet "https://cdn.jsdelivr.net/npm/aws-icons@3.3.0/icons/resource/Internet.svg"
+icon generic-application "https://cdn.jsdelivr.net/npm/aws-icons@3.3.0/icons/resource/GenericApplication.svg"
+icon office-building "https://cdn.jsdelivr.net/npm/aws-icons@3.3.0/icons/resource/Officebuilding.svg"
+icon authenticated-user "https://cdn.jsdelivr.net/npm/aws-icons@3.3.0/icons/resource/AuthenticatedUser.svg"
