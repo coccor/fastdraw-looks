@@ -1,0 +1,108 @@
+// Vercel: drawn the way Vercel's docs draw (vercel.com/docs/fundamentals/infrastructure). Boxes of words only, in
+// regular Geist at 13px, white with a light grey hairline and a 6px radius. The outer panel (zone) is hatched with fine
+// diagonal lines; region is a plain panel and panel a grey one inside it, each captioned in bold Geist Mono capitals.
+// external is a browser window, optional a dashed box, chip a small square holding an icon, badge a black circle on
+// a line. Connectors are black hairlines with rounded elbows, labelled in mono on pill plates; primary, link and miss
+// are blue, teal and red with pills to match. Same style names as the built-in look.
+
+canvas paper=paper dots=none
+
+color paper  #ffffff
+color card   #ffffff
+color ink    #171717
+color muted  #666666
+color soft   #a1a1a1
+color accent #0070f3
+color link   #0f9d8a
+color teal   #0f9d8a
+color amber  #f5a623
+color rose   #e5484d
+color violet #7c3aed
+
+font sans  "Geist"
+font mono  "Geist Mono"
+font serif "Newsreader"
+
+// ---- boxes ----------------------------------------------------------------
+style node shape=rect radius=6 size=160x64 fill=#ffffff stroke=ink/0.16 sw=1 sub.font=sans sub.color=muted title.color=ink title.weight=400 title.size=13 sub.size=11 icon.size=18
+    tag.color=muted tag.border=ink/0.2 tag.font=mono icon.color=ink icon.fill=none
+    use="default box: a backend, service, component or step"
+style focal extends node fill=#eef6ff stroke=accent/0.7 sw=1 title.color=ink title.weight=400 title.size=13 sub.color=muted sub.font=sans sub.size=11 tag.font=mono icon.color=accent icon.fill=none icon.size=18
+    tag.color=accent tag.border=accent/0.4 ghost.color=accent/0.08
+    use="the one or two elements the diagram is about"
+style store extends node fill=#fafafa shape=rect stroke=ink/0.16 icon.color=ink icon.fill=none tag.color=muted tag.border=ink/0.2 title.color=ink title.weight=400 title.size=13 sub.color=muted sub.font=sans sub.size=11 tag.font=mono icon.size=18
+    path=none
+    use="something that holds data or state"
+style cloud extends node fill=#f2f2f2 stroke=ink/0.12 icon.color=ink icon.fill=none tag.color=muted tag.border=ink/0.2 title.color=ink title.weight=400 title.size=13 sub.color=muted sub.font=sans sub.size=11 tag.font=mono icon.size=18
+    use="a hosted or third-party platform"
+style external extends node fill=#ffffff stroke=ink/0.16 dash=none icon.color=ink icon.fill=none shape=path path="M0.0375,0 L0.9625,0 Q1,0 1,0.0938 L1,0.9062 Q1,1 0.9625,1 L0.0375,1 Q0,1 0,0.9062 L0,0.0938 Q0,0 0.0375,0 Z M0.0612,0.1875 C0.0612,0.1531 0.0887,0.1531 0.0887,0.1875 C0.0887,0.2219 0.0612,0.2219 0.0612,0.1875 Z M0.1113,0.1875 C0.1113,0.1531 0.1388,0.1531 0.1388,0.1875 C0.1388,0.2219 0.1113,0.2219 0.1113,0.1875 Z M0.1612,0.1875 C0.1612,0.1531 0.1888,0.1531 0.1888,0.1875 C0.1888,0.2219 0.1612,0.2219 0.1612,0.1875 Z" title.color=ink title.weight=400 title.size=13 sub.color=muted sub.font=sans sub.size=11 tag.color=muted tag.border=ink/0.2 tag.font=mono icon.size=18
+    use="a person or system outside what you own"
+style optional extends node fill=#ffffff stroke=ink/0.25 dash=3,3 tag.color=muted tag.border=ink/0.2 title.color=ink title.weight=400 title.size=13 sub.color=muted sub.font=sans sub.size=11 tag.font=mono icon.color=ink icon.fill=none icon.size=18
+    use="optional or asynchronous participant"
+style sticky extends node radius=6 size=120x120 fill=#fff8e6 stroke=amber/0.5 tag.color=ink tag.border=ink/0.2 title.weight=400
+    use="a yellow sticky note: an idea, comment or open question"
+style sticky-orange extends sticky fill=#fff0f0 stroke=rose/0.5 use="an orange sticky note: a risk or issue"
+style sticky-violet extends sticky fill=#f5f0ff stroke=violet/0.5 use="a violet sticky note: a decision or note"
+
+// ---- flowchart shapes -----------------------------------------------------
+style step extends node size=160x48 use="flowchart action"
+style terminal extends node radius=24 size=160x48 fill=#ffffff stroke=ink/0.2 title.weight=400 title.size=13
+    use="flowchart start or end"
+style terminal-focal extends terminal fill=#eef6ff stroke=accent/0.7 sw=1 title.color=ink title.weight=400
+    use="the flowchart outcome that matters most"
+style decision shape=diamond size=200x96 fill=#ffffff stroke=ink/0.2 sw=1 title.weight=400 title.size=13
+    use="flowchart yes/no question; put the text on two short lines"
+
+// ---- regions and markers --------------------------------------------------
+style zone shape=rect radius=4 fill=#ffffff stroke=ink/0.14 sw=1 layer=back hatch=ink/0.12 hatch.gap=6 hatch.sw=0.6 title.dy=12 title.fill=none
+    title.pos=top title.align=left title.font=mono title.size=10 title.weight=700 title.color=ink title.spacing=0.04 title.caps=1
+    use="a labelled region drawn behind a group of boxes; always give WxH"
+style panel shape=rect radius=4 sw=1 layer=back title.pos=top title.align=left title.font=mono title.size=10 title.weight=700 title.color=ink title.spacing=0.04 title.caps=1 title.dy=12 title.fill=none fill=#f2f2f2 stroke=ink/0.12 use="a grey inner panel, as the docs draw Routing inside a region; always give WxH"
+style region shape=rect radius=4 sw=1 layer=back title.pos=top title.align=left title.font=mono title.size=10 title.weight=700 title.color=ink title.spacing=0.04 title.caps=1 title.dy=12 title.fill=none fill=#ffffff stroke=ink/0.14 use="a plain white panel, as the docs draw a region (LHR1) inside the hatched one; always give WxH"
+style badge shape=ellipse size=24x24 fill=ink stroke=none sw=0 icon.color=#ffffff icon.size=12 use="a small black badge sitting on a line, holding one icon (a shield where a firewall checks the request)"
+style chip extends node size=56x56 radius=6 icon.size=20 use="a small square box holding one icon and no words, as the docs draw the anycast cloud or a function"
+style miss extends arrow stroke=rose label.font=mono label.size=10 label.caps=0 label.spacing=0 label.color=rose label.fill=#fdeeee label.border=rose label.radius=10 label.pad=7 label.sw=1 use="a line for a failure or a cache miss: red, its pill tinted"
+style bar shape=rect radius=2 size=8x80 fill=accent/0.10 stroke=accent/0.6 sw=1
+    use="sequence diagram activation bar, centred on a lifeline; always give WxH"
+
+style table shape=table radius=6 fill=#ffffff stroke=ink/0.16 sw=1 head.fill=#f2f2f2 rule=ink/0.08
+    cell.font=mono cell.size=10 detail.color=muted
+    use="an entity, class or database table: a header and rows. One line per row: | id \"name\" \"type\" \"key\". Arrows can end on a row: orders.user_id -> users.id"
+style matrix extends table align=center grid=1 cell.font=sans
+    use="a grid of values: first row with |= for the column headings, first cell of each row is its name"
+style chart shape=chart fill=none stroke=ink/0.4 sw=1 mask=0 bar.radius=2 grid.color=ink/0.08
+    tick.font=mono tick.size=9 tick.color=muted
+    use="axes with your numbers drawn for you: chart at x,y WxH x=\"Q1,Q2,Q3\" y=0..100, then a line per series: | bars \"Revenue\" 42 61 75"
+
+// ---- lines ----------------------------------------------------------------
+style arrow line stroke=ink sw=1 route=ortho radius=8 label.font=mono label.size=10 label.color=ink label.spacing=0 label.caps=0 head=arrow head.size=0.75 label.fill=#ffffff label.border=ink/0.8 label.radius=10 label.pad=7 label.sw=1
+    use="default arrow"
+style primary extends arrow stroke=accent sw=2 label.color=accent label.fill=#eef6ff label.border=accent use="the main path; at most two per diagram"
+style link extends arrow stroke=link label.color=link label.fill=#e9f7f4 label.border=link use="an HTTP or API request crossing a boundary"
+style return extends arrow dash=4,3 use="a response, or something optional or asynchronous"
+style relation extends relation stroke=ink/0.7 label.font=sans label.size=10 label.spacing=0 label.caps=0
+style lifeline line head=none stroke=ink/0.2 sw=1 dash=4,4 route=straight use="sequence diagram lifeline"
+style rule line head=none stroke=ink/0.1 sw=1 route=straight use="thin separator, e.g. above a legend"
+
+// ---- text -----------------------------------------------------------------
+style h1 text font=sans size=26 weight=600 spacing=-0.04 color=ink use="diagram title"
+style kicker text font=mono size=10 weight=700 color=muted spacing=0.04 caps=1 use="optional: a short category above the title, e.g. PROCESS"
+style dek text font=sans size=14 color=muted use="optional: one line under the title saying what the diagram shows"
+style eyebrow text font=mono size=8 color=muted spacing=0.14 caps=1 use="small caps label, e.g. LEGEND"
+style caption text font=sans size=9.5 color=muted use="small explanatory text"
+style legend extends legend rule=ink/0.1 title.font=mono item.size=9.5
+style note text font=sans size=13 color=muted use="a short aside; at most two"
+style small text font=mono size=9 color=muted use="technical detail: a port, path or command"
+
+guidance "focal, terminal-focal and primary are the accent. Use the accent on at most two things in one diagram."
+guidance "Never fill a shape with ink to make it stand out; use the accent, or a tint such as accent/0.14."
+guidance "tag= is a 3 or 4 letter type marker in the corner of a box (EXT, EDGE, API, DB). Use it on architecture boxes, not flowchart shapes."
+guidance "sub= is a short second line of detail: a product name, path, port or protocol. Names of things go in the main text."
+guidance "kicker and dek are optional. Add a kicker only when the diagram belongs to a named category, and a dek only when there is one clear message; most diagrams need neither."
+guidance "Finish with a legend: one statement, 'legend at x,y' followed by style=\"what it means\" for each style you used."
+guidance "Boxes hold words, not icons: write names on one or two lines (Global\nAnycast Load Balancing) and leave icon= off, except on chip and badge."
+guidance "Keep colour for meaning: primary blue for the request, link teal for a hit, miss red. Everything else stays black on white."
+guidance "Line labels sit on pill plates: keep them short, one or two words or a method and path such as GET /api."
+guidance "Nest panels as the docs do: a hatched zone, a region inside it, grey panels inside that."
+
+// ---- icons ----------------------------------------------------------------------

@@ -1,0 +1,25 @@
+look "../carbon.look"
+pub: network-group "Public network" at 40,40 176x528
+user: external "User" at 56,88 icon=user
+net: node "Internet" at 56,232 icon=internet
+vpn: security "VPN connection" at 56,400 icon=vpn
+ibm: cloud-group "IBM Cloud" at 248,40 912x528
+dal: region "Dallas Region" at 272,88 864x456
+z1: az "Dallas Zone 1" at 296,136 320x384
+s1: subnet "Subnet 1 · 10.10.10.0/24" at 312,184 288x304
+sg1: security-group "Frontend security" at 328,232 256x240
+vsi1: compute "VSI 1" sub="Type: Dedicated\nvCPUs: 2\nRAM: 8 GiB" at 360,312 icon=vm
+plb: node "Public load\nbalancer" at 632,152 icon=load-balancer
+prv: node "Private load\nbalancer" at 632,368 icon=load-balancer
+z2: az "Dallas Zone 2" at 792,136 320x384
+s2: subnet "Subnet 3 · 10.20.30.0/24" at 808,184 288x304
+sg2: security-group "Frontend security" at 824,232 256x240
+vsi2: compute "VSI 3" sub="Type: Dedicated\nvCPUs: 2\nRAM: 8 GiB" at 856,312 icon=vm
+user <-> net
+net <-> vpn
+net.right <-> plb.left
+plb.bottom <-> vsi1.top
+plb.bottom <-> vsi2.top
+prv.left <-> vsi1.right
+prv.right <-> vsi2.left
+legend at 40,600 swatch.ink="User" swatch.rose="Security" swatch.accent="Network" swatch.#198038="Compute" az="Zone" security-group="Security group" subnet="Subnet"

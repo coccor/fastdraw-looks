@@ -1,0 +1,115 @@
+// Carbon: drawn the way IBM's technical diagram guidelines draw (ibm.com/design/language/infographics/technical-diagrams).
+// Most things are small nodes: a 48px square in the category's colour with a white icon, the name in semibold under
+// it (Blue 60 network, Teal 60 data, Purple 60 application; security, devops and backend add Red, Magenta and Gray).
+// People are black circles. The subject, and a compute resource, are large colour-block nodes with their details
+// left-aligned. Groups are frames with a bar down the left side: cloud-group and subnet blue, region grey, az dotted.
+// Connectors are black, 1px, with square elbows. IBM Plex Sans, text always black. Needs FastDraw's icon.bg=, side=
+// and icon.block=. Same style names as the built-in look.
+
+canvas paper=paper dots=none
+
+color paper  #ffffff
+color card   #ffffff
+color ink    #161616
+color muted  #525252
+color soft   #8d8d8d
+color accent #0f62fe
+color link   #0f62fe
+color teal   #007d79
+color amber  #f1c21b
+color rose   #da1e28
+color violet #8a3ffc
+
+font sans  "IBM Plex Sans" "https://cdn.jsdelivr.net/fontsource/fonts/ibm-plex-sans@5.3.0/latin-{weight}-{style}.ttf"
+font mono  "IBM Plex Mono" "https://cdn.jsdelivr.net/fontsource/fonts/ibm-plex-mono@5.3.0/latin-{weight}-{style}.ttf"
+font serif "Newsreader"
+
+// ---- boxes ----------------------------------------------------------------
+style node shape=rect radius=0 size=144x104 fill=none stroke=none sw=0 sub.font=sans sub.color=ink dash=none icon.pos=top icon.size=24 icon.bg=accent title.color=ink title.size=12 title.weight=600 title.align=center sub.size=10
+    tag.color=ink tag.border=ink/0.4 tag.font=mono icon.color=#ffffff icon.fill=none
+    use="default box: a backend, service, component or step"
+style focal extends node fill=#edf5ff stroke=accent sw=1 title.color=ink shape=rect radius=0 size=192x96 dash=none icon.pos=left icon.bg=none icon.block=accent icon.block.w=48 icon.size=24 icon.color=#ffffff icon.fill=none title.size=12 title.weight=600 title.align=left sub.color=ink sub.font=sans sub.size=10 tag.font=mono
+    tag.color=ink tag.border=ink/0.4 ghost.color=accent/0.10
+    use="the one or two elements the diagram is about"
+style store extends node fill=none shape=rect stroke=none icon.color=#ffffff icon.fill=none tag.color=ink tag.border=ink/0.4 radius=0 size=144x104 sw=0 dash=none icon.pos=top icon.size=24 icon.bg=teal title.color=ink title.size=12 title.weight=600 title.align=center sub.color=ink sub.font=sans sub.size=10 tag.font=mono
+    path=none
+    use="something that holds data or state"
+style cloud extends node fill=none stroke=none icon.color=#ffffff icon.fill=none tag.color=ink tag.border=ink/0.4 shape=rect radius=0 size=144x104 sw=0 dash=none icon.pos=top icon.size=24 icon.bg=violet title.color=ink title.size=12 title.weight=600 title.align=center sub.color=ink sub.font=sans sub.size=10 tag.font=mono
+    use="a hosted or third-party platform"
+style external extends node fill=none stroke=none dash=none icon.color=#ffffff icon.fill=none shape=rect radius=0 size=144x104 sw=0 icon.pos=top icon.size=24 icon.bg=ink title.color=ink title.size=12 title.weight=600 title.align=center sub.color=ink sub.font=sans sub.size=10 tag.color=ink tag.border=ink/0.4 tag.font=mono icon.bg.shape=circle
+    use="a person or system outside what you own"
+style optional extends node fill=none stroke=none dash=none tag.color=ink tag.border=ink/0.4 shape=rect radius=0 size=144x104 sw=0 icon.pos=top icon.size=24 icon.bg=soft icon.color=#ffffff icon.fill=none title.color=ink title.size=12 title.weight=600 title.align=center sub.color=ink sub.font=sans sub.size=10 tag.font=mono
+    use="optional or asynchronous participant"
+style sticky extends node radius=0 size=120x120 fill=#fcf4d6 stroke=amber tag.color=ink tag.border=ink/0.4 side=amber side.w=6 title.align=left title.color=ink title.weight=400 tag.font=mono
+    use="a yellow sticky note: an idea, comment or open question"
+style sticky-orange extends sticky fill=#fff1f1 stroke=rose side=rose use="an orange sticky note: a risk or issue"
+style sticky-violet extends sticky fill=#f6f2ff stroke=violet side=violet use="a violet sticky note: a decision or note"
+
+// ---- flowchart shapes -----------------------------------------------------
+style step extends node size=160x48 shape=rect radius=0 fill=#ffffff stroke=ink sw=1 icon.pos=left icon.bg=none icon.color=ink title.weight=600 title.size=12 title.color=ink title.align=center sub.color=ink sub.size=10 tag.color=ink tag.border=ink/0.4 tag.font=mono use="flowchart action"
+style terminal extends node radius=24 size=160x48 fill=#ffffff stroke=ink sw=1 title.color=ink
+    use="flowchart start or end"
+style terminal-focal extends terminal fill=#edf5ff stroke=accent sw=2 title.color=ink
+    use="the flowchart outcome that matters most"
+style decision shape=diamond size=200x96 fill=#ffffff stroke=ink sw=1 title.color=ink
+    use="flowchart yes/no question; put the text on two short lines"
+
+// ---- regions and markers --------------------------------------------------
+style zone shape=rect radius=0 fill=#ffffff stroke=soft sw=1 layer=back side=soft side.w=4 title.dy=12 title.fill=none tag.color=ink tag.border=ink/0.4 tag.font=mono
+    title.pos=top title.align=left title.font=sans title.size=12 title.weight=600 title.color=ink title.spacing=0 title.caps=0
+    use="a labelled region drawn behind a group of boxes; always give WxH"
+style cloud-group shape=rect radius=0 sw=1 layer=back title.pos=top title.align=left title.font=sans title.size=12 title.weight=600 title.color=ink title.spacing=0 title.caps=0 title.dy=12 title.fill=none tag.color=ink tag.border=ink/0.4 tag.font=mono fill=#edf5ff stroke=accent side=accent side.w=4 use="IBM Cloud, or a cloud account: blue, a bar down its left side; always give WxH"
+style region shape=rect radius=0 sw=1 layer=back title.pos=top title.align=left title.font=sans title.size=12 title.weight=600 title.color=ink title.spacing=0 title.caps=0 title.dy=12 title.fill=none tag.color=ink tag.border=ink/0.4 tag.font=mono fill=#ffffff stroke=soft side=soft side.w=4 use="a region or data centre: a grey frame with a bar down its left side; always give WxH"
+style az shape=rect radius=0 sw=1 layer=back title.pos=top title.align=left title.font=sans title.size=12 title.weight=600 title.color=ink title.spacing=0 title.caps=0 title.dy=12 title.fill=none tag.color=ink tag.border=ink/0.4 tag.font=mono fill=none stroke=soft dash=1.5,2.5 use="an availability zone: dotted, no fill; always give WxH"
+style subnet shape=rect radius=0 sw=1 layer=back title.pos=top title.align=left title.font=sans title.size=12 title.weight=600 title.color=ink title.spacing=0 title.caps=0 title.dy=12 title.fill=none tag.color=ink tag.border=ink/0.4 tag.font=mono fill=#edf5ff stroke=accent/0.6 side=accent side.w=4 use="a VPC or subnet: pale blue with a blue bar; always give WxH"
+style security-group shape=rect radius=0 sw=1 layer=back title.pos=top title.align=left title.font=sans title.size=12 title.weight=600 title.color=ink title.spacing=0 title.caps=0 title.dy=12 title.fill=none tag.color=ink tag.border=ink/0.4 tag.font=mono fill=none stroke=rose dash=1.5,2.5 use="a security group or boundary: dotted Red 60; always give WxH"
+style network-group shape=rect radius=0 sw=1 layer=back title.pos=top title.align=left title.font=sans title.size=12 title.weight=600 title.color=ink title.spacing=0 title.caps=0 title.dy=12 title.fill=none tag.color=ink tag.border=ink/0.4 tag.font=mono fill=#ffffff stroke=soft side=accent side.w=4 use="an outside network (public, enterprise): white with a blue bar; always give WxH"
+style security extends node icon.bg=rose use="a security service (firewall, VPN, gateway): Red 60"
+style compute extends focal fill=#ffffff stroke=#198038 icon.block=#198038 use="a compute resource with details (a server, VSI, cluster): a Green 60 colour block"
+style devops extends node icon.bg=#d02670 use="a DevOps or classic service: Magenta 60"
+style backend extends node icon.bg=#6f6f6f use="a backend or enterprise system: Gray 60"
+style bar shape=rect radius=0 size=8x80 fill=accent/0.12 stroke=accent sw=1
+    use="sequence diagram activation bar, centred on a lifeline; always give WxH"
+
+style table shape=table radius=0 fill=#ffffff stroke=soft sw=1 head.fill=#edf5ff rule=ink/0.12
+    cell.font=sans cell.size=10 detail.color=muted
+    use="an entity, class or database table: a header and rows. One line per row: | id \"name\" \"type\" \"key\". Arrows can end on a row: orders.user_id -> users.id"
+style matrix extends table align=center grid=1 cell.font=sans
+    use="a grid of values: first row with |= for the column headings, first cell of each row is its name"
+style chart shape=chart fill=none stroke=ink/0.6 sw=1 mask=0 bar.radius=0 grid.color=ink/0.08
+    tick.font=mono tick.size=9 tick.color=muted
+    use="axes with your numbers drawn for you: chart at x,y WxH x=\"Q1,Q2,Q3\" y=0..100, then a line per series: | bars \"Revenue\" 42 61 75"
+
+// ---- lines ----------------------------------------------------------------
+style arrow line stroke=ink sw=1 route=ortho radius=0 label.font=sans label.size=10 label.color=ink label.spacing=0 label.caps=0 head=arrow head.size=0.8
+    use="default arrow"
+style primary extends arrow stroke=accent sw=1 label.color=ink use="the main path; at most two per diagram"
+style link extends arrow stroke=accent label.color=ink sw=1 use="an HTTP or API request crossing a boundary"
+style return extends arrow dash=4,4 use="a response, or something optional or asynchronous"
+style relation extends relation stroke=ink label.font=sans label.size=10 label.spacing=0 label.caps=0
+style lifeline line head=none stroke=ink/0.3 sw=1 dash=4,4 route=straight use="sequence diagram lifeline"
+style rule line head=none stroke=ink/0.15 sw=1 route=straight use="thin separator, e.g. above a legend"
+
+// ---- text -----------------------------------------------------------------
+style h1 text font=sans size=24 weight=600 spacing=0 color=ink use="diagram title"
+style kicker text font=sans size=12 weight=400 color=accent spacing=0 caps=0 use="optional: a short category above the title, e.g. PROCESS"
+style dek text font=sans size=14 color=muted use="optional: one line under the title saying what the diagram shows"
+style eyebrow text font=sans size=10 color=muted spacing=0 caps=0 use="small caps label, e.g. LEGEND"
+style caption text font=sans size=9.5 color=ink use="small explanatory text"
+style legend extends legend rule=ink/0.15 title.font=sans item.size=10 title.caps=0 title.spacing=0
+style note text font=sans size=13 color=muted use="a short aside; at most two"
+style small text font=mono size=9 color=muted use="technical detail: a port, path or command"
+
+guidance "focal, terminal-focal and primary are the accent. Use the accent on at most two things in one diagram."
+guidance "Never fill a shape with ink to make it stand out; use the accent, or a tint such as accent/0.14."
+guidance "tag= is a 3 or 4 letter type marker in the corner of a box (EXT, EDGE, API, DB). Use it on architecture boxes, not flowchart shapes."
+guidance "sub= is a short second line of detail: a product name, path, port or protocol. Names of things go in the main text."
+guidance "kicker and dek are optional. Add a kicker only when the diagram belongs to a named category, and a dek only when there is one clear message; most diagrams need neither."
+guidance "Finish with a legend: one statement, 'legend at x,y' followed by style=\"what it means\" for each style you used."
+guidance "Give every node an icon: a small node is its coloured square and the name under it; without an icon only the name is drawn."
+guidance "Small nodes are 144x104 boxes: leave their height free under the square for one or two lines of name."
+guidance "focal and compute are large nodes (192x96): put the details in sub=, one per line, such as sub="Type: Dedicated\nvCPUs: 2"."
+guidance "Colour means category (network, data, application, security); text is always black. Always finish with a legend, as IBM asks."
+guidance "Nest groups as IBM does: cloud-group > region > az > subnet, with security-group dotted round what it protects."
+
+// ---- icons ----------------------------------------------------------------------

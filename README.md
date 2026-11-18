@@ -4,6 +4,7 @@ Looks for [FastDraw](https://github.com/coccor/fastdraw) diagrams. A look sets t
 
 - Cloud looks: **Azure**, **AWS**, **Google Cloud** and **Kubernetes**, each with its own icons and its groups (VPCs, subnets, resource groups, namespaces).
 - Looks for a use: **Print** (black and white), **Blueprint**, **High contrast** (low vision and colour blindness) and **Terminal**.
+- Company styles: **Carbon** (IBM's technical diagrams), **Vercel** (Vercel's docs) and **FigJam** (a FigJam board). Carbon needs a FastDraw with `side=` and `icon.block=`.
 - Six styles of drawing: **Engraved**, **Headline**, **Keys**, **Listing**, **Offset** and **Transit**. These used to ship inside FastDraw.
 
 ## Using a look
@@ -78,6 +79,28 @@ One monospace face (JetBrains Mono) on near-black, square boxes in thin grey, a 
 
 ![Terminal](previews/terminal.png)
 
+## Company styles
+
+Each draws the way a company draws its own diagrams: its own kinds of element as extra styles, and the built-in look's style names kept, so a diagram drawn for the built-in look still draws. Each preview is a diagram composed the way that company composes one, in `previews/`.
+
+### Carbon — `carbon.look`
+
+After IBM's [technical diagram guidelines](https://www.ibm.com/design/language/infographics/technical-diagrams/design). Most things are small nodes: a 48px square in the category's colour with a white icon, the name in semibold under it (`node` Blue 60 for network, `store` Teal, `cloud` Purple, `security` Red, `devops` Magenta, `backend` Gray). People are black circles (`external`). The subject and `compute` are large colour-block nodes, with their details left-aligned. Groups are frames with a bar down the left side: `cloud-group` and `subnet` blue, `region` grey, `network-group` white with a blue bar, `az` dotted, `security-group` dotted red. Connectors are black, 1px, with square elbows. IBM Plex Sans, text always black; finish with a legend, as IBM asks. Needs FastDraw's `icon.bg=`, `side=` and `icon.block=`.
+
+![Carbon](previews/carbon.png)
+
+### Vercel — `vercel.look`
+
+After the diagrams in [Vercel's docs](https://vercel.com/docs/fundamentals/infrastructure). Boxes of words only, in regular Geist at 13px, white with a light grey hairline. The outer panel (`zone`) is hatched with fine diagonal lines; `region` is a plain panel and `panel` a grey one inside it, each captioned in bold Geist Mono capitals. `external` is a browser window, `optional` a dashed box (one case of several), `chip` a small square holding an icon, `badge` a black circle sitting on a line. Connectors are black hairlines with rounded elbows, labelled in mono on pill plates; `primary`, `link` and `miss` are blue, teal and red with pills to match.
+
+![Vercel](previews/vercel.png)
+
+### FigJam — `figjam.look`
+
+Like a [FigJam](https://www.figma.com/figjam/) board. Grey dots on white; flat shapes in FigJam's colours with square corners and no outline: yellow steps, violet circles where a flow starts (`external`, `terminal`), terracotta diamonds for questions, the subject in full green. Sticky notes are squares that sit a little off the page. A `zone` is a section, a pale panel named on a yellow tag above its corner (`section` is a violet one), so leave room above it. Connectors are black, 1.5px. `cursor` and `name-tag` draw the people on the board. Inter.
+
+![FigJam](previews/figjam.png)
+
 ## Styles of drawing
 
 Each preview is the same checkout diagram, `previews/sample.fdraw`.
@@ -122,7 +145,7 @@ Thick routes with stops, like a network map.
 
 Engraved, Keys, Listing, Offset and Transit are written by `tools/gen-looks.py`, which keeps their style names in step with each other; edit it and run `python3 tools/gen-looks.py`. Headline is edited by hand.
 
-The cloud looks are written by `tools/gen-cloud-looks.py` and the looks for a use by `tools/gen-purpose-looks.py`, both from `tools/base-styles.txt` (the built-in look's styles) with the helpers in `tools/lookgen.py`; `tools/aws-icons.txt` lists the files in `aws-icons@3.3.0`. Run `python3 tools/gen-cloud-looks.py` and `python3 tools/gen-purpose-looks.py`. The diagrams in `previews/` draw the preview images: `fastdraw render previews/aws.fdraw --no-embed --scale 1`.
+The cloud looks are written by `tools/gen-cloud-looks.py`, the looks for a use by `tools/gen-purpose-looks.py` and the company styles by `tools/gen-house-looks.py`, all from `tools/base-styles.txt` (the built-in look's styles) with the helpers in `tools/lookgen.py`; `tools/aws-icons.txt` lists the files in `aws-icons@3.3.0`. Run `python3 tools/gen-cloud-looks.py`, `python3 tools/gen-purpose-looks.py` and `python3 tools/gen-house-looks.py`. The diagrams in `previews/` draw the preview images: `fastdraw render previews/aws.fdraw --no-embed --scale 1`.
 
 ## Making your own
 

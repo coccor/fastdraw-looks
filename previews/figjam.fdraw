@@ -1,0 +1,26 @@
+look "../figjam.look"
+flow: zone "Sign-up flow" at 40,72 856x520
+modal: external "Modal" at 72,112
+email: external "Email" at 72,336
+s1: focal "Step 1" at 248,264
+s2: node "Step 2" at 520,264
+s3: optional "Step 3" at 744,264
+ca: decision "Create\naccount" at 248,432
+ve: decision "Verify\nemail" at 520,432
+modal.right -> s1.left
+email.right -> s1.left
+s1 -> s2 "Account"
+s1 -> ca "No account"
+ca -> ve
+ve -> s2
+s2 -> s3 style=return
+notes: section "Open questions" at 952,72 352x520
+n1: sticky "Can Email skip\nverification for\ninvited users?" at 976,120 144x144
+n2: sticky-orange "Step 2 has too\nmany form fields" at 1136,120 144x144
+n3: sticky-violet "Ask Jenny\nabout SSO" at 976,296 144x144
+c1: cursor at 432,144 16x20 fill=violet
+t1: name-tag "Ally" at 452,160 fill=violet
+c2: cursor at 676,212 16x20 fill=#14ae5c
+t2: name-tag "Jenny" at 696,228 fill=#14ae5c
+c3: cursor at 1196,312 16x20 fill=#ff24bd
+t3: name-tag "Meaza" at 1216,328 56x20 fill=#ff24bd

@@ -1,0 +1,41 @@
+look "../vercel.look"
+req: external "User\nRequest" at 40,56 160x64
+any: chip at 92,160 icon=cloud
+lb: node "Global\nAnycast Load\nBalancing" at 40,256 160x96
+fw: zone "Vercel Firewall" at 264,40 840x704
+pwf: node "Platform-wide Firewall" at 288,88 360x48
+waf: node "Web Application Firewall" at 720,88 360x48
+lhr: region "LHR1" at 280,168 808x560
+tls: node "TLS Terminator" at 320,272 160x56
+rt: panel "Routing" at 560,232 504x176
+rc: node "Routing config\n(Includes Middleware)" at 584,280 232x96
+red: node "Redirects" at 848,280 192x40
+rew: node "Rewrites" at 848,336 192x40
+cl: zone "Compute Layer" at 304,456 272x248
+fnr: node "Vercel Functions Router" at 328,504 224x48
+f1: chip at 336,616 icon=cpu
+f2: chip at 412,616 icon=cpu
+f3: chip at 488,616 icon=cpu
+vc: zone "Vercel Cache" at 600,456 464x248
+gen: optional "Generates in real time\n& populates cache" at 624,504 184x56
+bg: optional "Generates in background\n& populates cache" at 624,600 184x56
+ba: node "Build\nAssets" at 952,504 96x152
+bs: node "Vercel\nBuild System" at 1136,360 160x72
+res: external "User\nResponse" at 1136,600 160x64
+b1: badge at 388,144 icon=shield
+req -> any
+any -> lb
+lb.right -> tls.left "Routes to POP"
+tls.top <-> pwf.bottom
+tls -> rc
+rc.right -> red.left
+rc.right -> rew.left
+rt.bottom -> fnr.top
+rt.bottom -> vc.top
+fnr.bottom -> f1.top
+fnr.bottom -> f2.top
+fnr.bottom -> f3.top
+ba.left -> gen.right "Miss" style=miss lpos=844,532
+ba.left -> bg.right "Stale hit (ISR)" style=link lpos=844,628
+ba.right -> res.left "Hit" style=link
+bs.left -> lhr.right
