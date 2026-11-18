@@ -1,0 +1,24 @@
+look "../tiles.look"
+ws: zone "WebSphere Application Server" at 64,96 920x520 icon=desktop
+home: group "Home" at 320,176 448x336 icon=house
+acct: node "Account" at 360,216 icon=user
+hm: node "Home" at 360,384 icon=house
+prod: focal "Product" at 632,300 icon=cube
+login: node "Login" at 128,488 icon=sign-in
+reg: node "Registration" at 384,680 icon=credit-card
+co: node "Checkout" at 848,152 icon=shopping-cart
+grp: frame "Group" at 1048,256 288x360 icon=cube
+cat: node "Catalog" at 1080,312 icon=book-open
+bc: node "Bar Chart" at 1208,312 icon=chart-bar
+db: store "Database" at 1144,480
+d1: status-red at 938,234
+d2: status-red at 450,466
+d3: status-orange at 722,382
+d4: status-yellow at 474,762
+d5: status-yellow at 1298,394
+login -> hm "HTTPS"
+hm -> acct "HTTPS"
+hm -> prod "HTTPS" style=primary
+home.right -> co.left "HTTPS" style=primary
+ws.bottom -> reg.top "HTTPS"
+co.right -> grp.top "HTTPS" style=alert

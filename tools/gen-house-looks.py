@@ -1,4 +1,5 @@
-# Writes carbon.look, vercel.look and figjam.look: looks drawn the way a company draws its own diagrams. Each
+# Writes carbon.look, vercel.look and figjam.look, looks drawn the way a company draws its own diagrams, and
+# tiles.look, after a threat-modelling app's canvas. Each
 # restyles every style of FastDraw's built-in look (tools/base-styles.txt), keeps the style names so a diagram drawn
 # for the built-in look still draws, and adds the company's own kinds of element as extra styles.
 #   python3 tools/gen-house-looks.py
@@ -249,8 +250,85 @@ def figjam(base):
                 'A cursor and a name-tag together show someone on the board: put the tag 4px right and 12px below the cursor, in its colour.']
     return look(base, head, 'canvas paper=paper dots=ink/0.18 dotgap=20', c, fonts('Inter'), edits, extra, guidance)
 
+# ---- Tiles ------------------------------------------------------------------------------------------------
+# After a threat-modelling app's diagram canvas: white square tiles with no outline floating on a soft shadow, a thin
+# dark icon with a small name under it, a coloured status dot on a tile's corner, groups with rounded corners (an
+# outer one in long grey dashes, an inner one with a thin indigo outline and a lavender fill) each named beside a
+# round lavender badge on its corner, thick dark grey connectors with square elbows and labels on dark pills.
+def tiles(base):
+    c = {'paper': '#f6f7fc', 'card': '#ffffff', 'ink': '#2b2b33', 'muted': '#6b6b78', 'soft': '#9d9dab',
+         'accent': '#2d2a9b', 'link': '#2d2a9b', 'teal': '#1fbf9a', 'amber': '#f7c948', 'rose': '#f25c5c', 'violet': '#6c63d9'}
+    tile = {'shape': 'rect', 'radius': '8', 'size': '96x88', 'fill': '#ffffff', 'stroke': 'none', 'sw': '0', 'dash': 'none',
+            'shadow': '#3b3f8c/0.16', 'shadow.size': '8', 'shadow.dx': '-3', 'shadow.dy': '5',
+            'icon.pos': 'top', 'icon.size': '26', 'icon.color': 'ink', 'icon.fill': 'none', 'icon.width': '1.2',
+            'title.color': 'ink', 'title.size': '10', 'title.weight': '400', 'title.align': 'center',
+            'sub.color': 'muted', 'sub.font': 'sans', 'sub.size': '8.5', 'tag.color': 'muted', 'tag.border': 'ink/0.2', 'tag.font': 'mono'}
+    edits = {
+        'node': tile,
+        # the subject: the same tile with its icon and name in indigo, on a slightly deeper shadow
+        'focal': {**tile, 'icon.color': 'accent', 'title.color': 'accent', 'title.weight': '500', 'shadow': '#2d2a9b/0.22',
+                  'tag.color': 'accent', 'tag.border': 'accent/0.4', 'ghost.color': 'accent/0.08'},
+        'store': {**tile, 'path': 'none', 'icon': 'database'},
+        'cloud': {**tile, 'fill': '#eeeffb'},
+        'external': {**tile, 'fill': '#ffffff/0.6', 'stroke': 'soft', 'sw': '1', 'dash': '4,3', 'shadow': 'none'},
+        'optional': {**tile, 'fill': 'none', 'stroke': 'soft', 'sw': '1', 'dash': '2,3', 'shadow': 'none'},
+        'sticky': {'radius': '8', 'fill': '#fff6d9', 'stroke': 'none', 'shadow': '#3b3f8c/0.16', 'shadow.size': '8', 'shadow.dx': '-3', 'shadow.dy': '5',
+                   'title.weight': '400', 'title.color': 'ink', 'tag.color': 'ink', 'tag.border': 'ink/0.2'},
+        'sticky-orange': {'fill': '#ffe6dc'},
+        'sticky-violet': {'fill': '#ecebfb'},
+        'step': {'radius': '8', 'size': '144x56', 'fill': '#ffffff', 'stroke': 'none', 'shadow': '#3b3f8c/0.16', 'shadow.size': '8', 'shadow.dx': '-3', 'shadow.dy': '5',
+                 'icon.pos': 'left', 'title.weight': '400', 'title.size': '11', 'title.align': 'center'},
+        'terminal': {'radius': '28', 'fill': '#ffffff', 'stroke': 'none', 'shadow': '#3b3f8c/0.16', 'shadow.size': '8', 'shadow.dx': '-3', 'shadow.dy': '5', 'title.weight': '400'},
+        'terminal-focal': {'fill': '#ffffff', 'stroke': 'none', 'title.color': 'accent', 'title.weight': '500'},
+        'decision': {'fill': '#ffffff', 'stroke': 'soft', 'sw': '1', 'title.weight': '400'},
+        # the outer group: long grey dashes, no fill, its name above the top edge beside a round badge on the corner
+        'zone': {'radius': '14', 'fill': 'none', 'stroke': 'soft', 'sw': '1.5', 'dash': '10,7',
+                 'title.font': 'sans', 'title.size': '11', 'title.weight': '500', 'title.color': 'ink', 'title.spacing': '0', 'title.caps': '0',
+                 'title.dy': '-22', 'title.fill': 'none',
+                 'icon.pos': 'corner', 'icon.size': '16', 'icon.color': 'accent', 'icon.bg': '#e6e6f8', 'icon.bg.shape': 'circle', 'icon.bg.size': '34',
+                 'icon.dx': '-8', 'icon.dy': '-8', 'icon.bg.shadow': '#3b3f8c/0.18', 'icon.bg.shadow.size': '6', 'icon.bg.shadow.dx': '-2', 'icon.bg.shadow.dy': '3'},
+        'bar': {'radius': '4', 'fill': '#eeeffb', 'stroke': 'none'},
+        'table': {'radius': '8', 'stroke': 'none', 'shadow': '#3b3f8c/0.16', 'shadow.size': '8', 'shadow.dx': '-3', 'shadow.dy': '5', 'head.fill': '#eeeffb', 'rule': 'ink/0.06', 'cell.font': 'sans'},
+        'chart': {'stroke': 'ink/0.5'},
+        # thick dark grey lines with square elbows; labels in small white capitals on dark pills
+        'arrow': {'stroke': '#55555f', 'sw': '2.2', 'radius': '0', 'head': 'arrow', 'head.size': '0.75',
+                  'label.font': 'sans', 'label.size': '7.5', 'label.weight': '500', 'label.color': '#ffffff', 'label.caps': '1', 'label.spacing': '0.06',
+                  'label.fill': '#5f5f69', 'label.border': '#5f5f69', 'label.radius': '8', 'label.pad': '6', 'label.sw': '1'},
+        'primary': {'stroke': 'teal', 'label.fill': 'teal', 'label.border': 'teal', 'label.color': '#ffffff'},
+        'link': {'stroke': 'accent', 'sw': '1.6', 'label.fill': 'accent', 'label.border': 'accent', 'label.color': '#ffffff'},
+        'return': {'dash': '6,4'},
+        'relation': {'stroke': '#55555f', 'sw': '1.6'},
+        'lifeline': {'stroke': 'soft', 'dash': '6,4'},
+        'rule': {'stroke': 'ink/0.1'},
+        'h1': {'size': '24', 'weight': '600', 'spacing': '-0.01'},
+        'kicker': {'color': 'accent', 'font': 'sans', 'weight': '500', 'spacing': '0', 'caps': '0'},
+        'legend': {'rule': 'ink/0.1', 'title.font': 'sans', 'title.caps': '0', 'title.spacing': '0'},
+    }
+    grp = ("radius=14 sw=1 layer=back title.pos=top title.align=left title.font=sans title.size=11 title.weight=500 title.color=ink "
+           "title.spacing=0 title.caps=0 title.dy=-22 title.fill=none icon.pos=corner icon.size=16 icon.color=accent icon.bg=#e6e6f8 "
+           "icon.bg.shape=circle icon.bg.size=34 icon.dx=-8 icon.dy=-8 icon.bg.shadow=#3b3f8c/0.18 icon.bg.shadow.size=6 icon.bg.shadow.dx=-2 icon.bg.shadow.dy=3")
+    extra = [
+        f'style group shape=rect {grp} fill=#eeeffb stroke=accent/0.6 use="an inner group: lavender with a thin indigo outline, named beside a badge on its corner; give it icon= for the badge and always WxH"',
+        f'style frame shape=rect {grp} fill=none stroke=soft use="a plain group: a thin grey outline, named beside a badge on its corner; always give WxH"',
+        'style alert extends arrow stroke=rose sw=2.2 radius=0 head=arrow head.size=0.75 label.font=sans label.size=7.5 label.weight=500 label.color=#ffffff label.caps=1 label.spacing=0.06 label.fill=rose label.border=rose label.radius=8 label.pad=6 label.sw=1 use="a line that carries a threat or a failure: red, its pill red"',
+        'style status-red shape=ellipse size=12x12 fill=rose stroke=none sw=0 use="a red status dot (critical) on a tile\'s bottom-right corner: put it at the tile\'s right-6, bottom-6"',
+        'style status-orange extends status-red fill=#f59673 use="an orange status dot (medium) on a tile\'s corner"',
+        'style status-yellow extends status-red fill=amber use="a yellow status dot (low) on a tile\'s corner"',
+    ]
+    head = ['Tiles: white square tiles with no outline on a soft shadow, a thin dark icon with a small name under it, on a pale',
+            'lavender page. The subject is in indigo. Groups have rounded corners: zone in long grey dashes, group lavender with',
+            'a thin indigo outline, frame a plain grey outline; each is named above its top edge beside a round lavender badge',
+            'on its corner (give the group an icon=). status-red, status-orange and status-yellow are dots for a tile\'s',
+            'corner. Lines are thick dark grey with square elbows, labelled in small capitals on dark pills; primary is teal,',
+            'alert red. Roboto. Needs FastDraw\'s shadow=, icon.bg= and icon.dx=. Same style names as the built-in look.']
+    guidance = ['Tiles are 96x88 and hold an icon and a one- or two-word name: give every tile an icon=, and keep sub= off.',
+                'A group\'s name sits above its top edge beside the badge: leave 32px clear above every zone, group and frame.',
+                'A status dot goes on a tile\'s bottom-right corner: a tile at x,y 96x88 takes its dot at x+90,y+82.',
+                'Line labels are small capitals on pills: a protocol or one word (HTTPS, gRPC, SQL).']
+    return look(base, head, 'canvas paper=paper dots=none', c, fonts('Roboto'), edits, extra, guidance)
+
 if __name__ == '__main__':
     base = base_styles()
-    for name, make in [('carbon', carbon), ('vercel', vercel), ('figjam', figjam)]:
+    for name, make in [('carbon', carbon), ('vercel', vercel), ('figjam', figjam), ('tiles', tiles)]:
         write(name, make(base))
-    print('wrote carbon.look, vercel.look, figjam.look')
+    print('wrote carbon.look, vercel.look, figjam.look, tiles.look')

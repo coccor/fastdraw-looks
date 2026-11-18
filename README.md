@@ -4,7 +4,7 @@ Looks for [FastDraw](https://github.com/coccor/fastdraw) diagrams. A look sets t
 
 - Cloud looks: **Azure**, **AWS**, **Google Cloud** and **Kubernetes**, each with its own icons and its groups (VPCs, subnets, resource groups, namespaces).
 - Looks for a use: **Print** (black and white), **Blueprint**, **High contrast** (low vision and colour blindness) and **Terminal**.
-- Company styles: **Carbon** (IBM's technical diagrams), **Vercel** (Vercel's docs) and **FigJam** (a FigJam board). Carbon needs a FastDraw with `side=` and `icon.block=`.
+- Company styles: **Carbon** (IBM's technical diagrams), **Vercel** (Vercel's docs) and **FigJam** (a FigJam board), and **Tiles** (soft white tiles, after a threat-modelling app). Carbon and Tiles need a FastDraw with `side=`, `icon.block=`, `icon.bg=`, `shadow=` and `icon.dx=`.
 - Six styles of drawing: **Engraved**, **Headline**, **Keys**, **Listing**, **Offset** and **Transit**. These used to ship inside FastDraw.
 
 ## Using a look
@@ -101,6 +101,12 @@ Like a [FigJam](https://www.figma.com/figjam/) board. Grey dots on white; flat s
 
 ![FigJam](previews/figjam.png)
 
+### Tiles — `tiles.look`
+
+After a threat-modelling app's diagram canvas. White square tiles with no outline floating on a soft shadow, a thin dark icon with a small name under it, on a pale lavender page; the subject in indigo. Groups have rounded corners and are named above their top edge beside a round lavender badge on their corner: `zone` in long grey dashes, `group` lavender with a thin indigo outline, `frame` a plain grey outline. `status-red`, `status-orange` and `status-yellow` are dots for a tile's corner. Lines are thick dark grey with square elbows, labelled in small capitals on dark pills; `primary` is teal, `alert` red. Roboto. Needs FastDraw's `shadow=`, `icon.bg=` and `icon.dx=`.
+
+![Tiles](previews/tiles.png)
+
 ## Styles of drawing
 
 Each preview is the same checkout diagram, `previews/sample.fdraw`.
@@ -145,7 +151,7 @@ Thick routes with stops, like a network map.
 
 Engraved, Keys, Listing, Offset and Transit are written by `tools/gen-looks.py`, which keeps their style names in step with each other; edit it and run `python3 tools/gen-looks.py`. Headline is edited by hand.
 
-The cloud looks are written by `tools/gen-cloud-looks.py`, the looks for a use by `tools/gen-purpose-looks.py` and the company styles by `tools/gen-house-looks.py`, all from `tools/base-styles.txt` (the built-in look's styles) with the helpers in `tools/lookgen.py`; `tools/aws-icons.txt` lists the files in `aws-icons@3.3.0`. Run `python3 tools/gen-cloud-looks.py`, `python3 tools/gen-purpose-looks.py` and `python3 tools/gen-house-looks.py`. The diagrams in `previews/` draw the preview images: `fastdraw render previews/aws.fdraw --no-embed --scale 1`.
+The cloud looks are written by `tools/gen-cloud-looks.py`, the looks for a use by `tools/gen-purpose-looks.py` and the company styles and Tiles by `tools/gen-house-looks.py`, all from `tools/base-styles.txt` (the built-in look's styles) with the helpers in `tools/lookgen.py`; `tools/aws-icons.txt` lists the files in `aws-icons@3.3.0`. Run `python3 tools/gen-cloud-looks.py`, `python3 tools/gen-purpose-looks.py` and `python3 tools/gen-house-looks.py`. The diagrams in `previews/` draw the preview images: `fastdraw render previews/aws.fdraw --no-embed --scale 1`.
 
 ## Making your own
 
